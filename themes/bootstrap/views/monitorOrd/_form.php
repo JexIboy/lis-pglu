@@ -101,7 +101,7 @@ $form = $this->beginWidget ( 'bootstrap.widgets.TbActiveForm', array (
     $(document).ready(function(){
         $("#MonitorOrd_ord_no").change(function(){
         	$.ajax({
-        		url : 'index.php?r=monitorOrd/getCommDetails',
+        		url : 'index.php?r=ordinance/getCommDetails',
         		data : {ord_no : $(this).val()},
         		dataType : 'json',
         		success : function (result) {

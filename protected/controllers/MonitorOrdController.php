@@ -28,7 +28,7 @@ class MonitorOrdController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('download','view','create','update', 'getCommDetails'),
+				'actions'=>array('download','view','create','update'),
 				'roles'=>array('SCR-T', 'SYSAD'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -307,9 +307,6 @@ class MonitorOrdController extends Controller
 		return $model;
 	}
 
-	public function actionGetCommDetails($ord_no) {
-		echo CJSON::encode(Ordinance::model()->findByPk($ord_no));
-	}
 	/**
 	 * Performs the AJAX validation.
 	 * @param MonitorOrd $model the model to be validated

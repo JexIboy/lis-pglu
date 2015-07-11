@@ -28,16 +28,16 @@ class OrdinanceController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('viewArchive','retrieve','index','view','create','update','admin','download','ordinanceList'),
-				'roles'=>array('SCR-T','SCR-RF','SCR-RC','SCR-BOK','BOKAL'),
+				'actions'=>array('viewArchive','retrieve','view','create','update','ordinanceList', 'getCommDetails'),
+				'roles'=>array('SCR-T','SCR-RF','SCR-RC','SCR-BOK','BOKAL', 'SYSAD'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('viewArchive','retrieve','delete','download','addoldordi'),
+				'actions'=>array('delete','addoldordi'),
 				'roles'=>array('SYSAD'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('admin','index','download'),
-				'roles'=>array('SCR-RF','BOKAL','VG','SCR-BOK','SCR-RC'),
+				'roles'=>array('SCR-RF','BOKAL','VG','SCR-BOK','SCR-RC', 'SYSAD'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -403,6 +403,14 @@ class OrdinanceController extends Controller
 		$this->render('viewArchive',array(
 			'model'=>$model,
 		));
+	}
+
+	public function actionGetCommDetails($meeting_ordi_id, $ord_no) {
+		if ($meeting_ordi_id) {
+			echo CJSON::encode(CommMeetingOrdi::getCommDetailsById($meeting_ordi_id));
+		} else {
+			echo CJSON::encode(Ordinance::model()->findByAttributes($ord_no));
+		}		
 	}
 
 	/**

@@ -45,59 +45,59 @@ class ForumQuestionController extends Controller
 		$x=ForumQuestion::model()->findByPk($id);
 		$x->confirmation=1;
 
-		if($x->save()){
-		$user = Yii::app()->getComponent('user');
+		if($x->save()) {
+			$user = Yii::app()->getComponent('user');
 
-require(Yii::getPathOfAlias('webroot').'/protected/extensions/YiiMailer/PHPMailer/'.'class.phpmailer.php');
+			require(Yii::getPathOfAlias('webroot').'/protected/extensions/YiiMailer/PHPMailer/'.'class.phpmailer.php');
 
-$mail = new PHPMailer(true); //New instance, with exceptions enabled
+			$mail = new PHPMailer(true); //New instance, with exceptions enabled
 
-    $body             = "Dear LIS-PGLU Administrator,<br><br>".
-    				'Your Topic "'.$x->topic.'"is Succesfully Approved and Posted';
-    $body             = preg_replace('/\\\\/','', $body); //Strip backslashes
+		    $body             = "Dear LIS-PGLU Administrator,<br><br>".
+		    				'Your Topic "'.$x->topic.'"is Succesfully Approved and Posted';
+		    $body             = preg_replace('/\\\\/','', $body); //Strip backslashes
 
-    $mail->IsSMTP();                           // tell the class to use SMTP
-    $mail->SMTPAuth   = true;
-    $mail->SMTPSecure = "ssl";                  // enable SMTP authentication
-    $mail->Host       = "smtp.gmail.com";                  // set the SMTP server port
-     // SMTP server
-    $mail->Username   = "johnbillymarbella@gmail.com";   // SMTP server username
-    $mail->Password   = "ZAIDOBLACK";            // SMTP server passwor
-    $mail->Host       = "smtp.gmail.com";
-    $mail->Port       = 465;
+		    $mail->IsSMTP();                           // tell the class to use SMTP
+		    $mail->SMTPAuth   = true;
+		    $mail->SMTPSecure = "ssl";                  // enable SMTP authentication
+		    $mail->Host       = "smtp.gmail.com";                  // set the SMTP server port
+		     // SMTP server
+		    $mail->Username   = "johnbillymarbella@gmail.com";   // SMTP server username
+		    $mail->Password   = "ZAIDOBLACK";            // SMTP server passwor
+		    $mail->Host       = "smtp.gmail.com";
+		    $mail->Port       = 465;
 
-    $mail->AddReplyTo("johnbillymarbella@gmail.com","LIS-PGLU Administrator");
+		    $mail->AddReplyTo("johnbillymarbella@gmail.com","LIS-PGLU Administrator");
 
-    $mail->From       = "johnbillymarbella@gmail.com";
-    $mail->FromName   = "johnbillymarbella@gmail.com";
+		    $mail->From       = "johnbillymarbella@gmail.com";
+		    $mail->FromName   = "johnbillymarbella@gmail.com";
 
-    $to = $x->email;
+		    $to = $x->email;
 
-    $mail->AddAddress($to);
+		    $mail->AddAddress($to);
 
-    $mail->Subject  = $x->topic;
+		    $mail->Subject  = $x->topic;
 
-    $mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
-    $mail->WordWrap   = 80; // set word wrap
+		    $mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+		    $mail->WordWrap   = 80; // set word wrap
 
-    $mail->MsgHTML($body);
+		    $mail->MsgHTML($body);
 
-    $mail->IsHTML(true); // send as HTML
+		    $mail->IsHTML(true); // send as HTML
 
-				//send
-				if ($mail->Send()) {
-					$mail->ClearAddresses();
-					$user->setFlash('success',"<strong>Succesfully Sent and Posted</strong>");
-					date_default_timezone_set("Asia/Manila");
-		$activity=new Activity();
-		$activity->act_desc='Approved and Posted a Topic ID: '.$id;
-		$activity->act_datetime=date('Y-m-d G:i:s');
-		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-		$activity->save();
-				} else {
-					Yii::app()->user->setFlash('error','Error while sending email: '.$mail->ErrorInfo);
-				}
+			//send
+			if ($mail->Send()) {
+				$mail->ClearAddresses();
+				$user->setFlash('success',"<strong>Succesfully Sent and Posted</strong>");
+
+				$activity=new Activity();
+				$activity->act_desc='Approved and Posted a Topic ID: '.$id;
+				$activity->act_datetime=date('Y-m-d G:i:s');
+				$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+				$activity->save();
+			} else {
+				Yii::app()->user->setFlash('error','Error while sending email: '.$mail->ErrorInfo);
 			}
+		}
 
 
 		$this->redirect(array('confirmTopic'));
@@ -105,63 +105,67 @@ $mail = new PHPMailer(true); //New instance, with exceptions enabled
 	public function actionUnPostQuestion($id){
 		$x=ForumQuestion::model()->findByPk($id);
 		$x->confirmation=2;
-		if($x->save()){
-		$user = Yii::app()->getComponent('user');
 
-require(Yii::getPathOfAlias('webroot').'/protected/extensions/YiiMailer/PHPMailer/'.'class.phpmailer.php');
+		if($x->save()) {
+			$user = Yii::app()->getComponent('user');
 
-$mail = new PHPMailer(true); //New instance, with exceptions enabled
+			require(Yii::getPathOfAlias('webroot').'/protected/extensions/YiiMailer/PHPMailer/'.'class.phpmailer.php');
 
-    $body             = "Dear LIS-PGLU Administrator,<br><br>".
-    				'Sorry Your Topic "'.$x->topic.'" Has Been Rejected for Some Reasons';
-    $body             = preg_replace('/\\\\/','', $body); //Strip backslashes
+			$mail = new PHPMailer(true); //New instance, with exceptions enabled
 
-     $mail->IsSMTP();                           // tell the class to use SMTP
-    $mail->SMTPAuth   = true;
-    $mail->SMTPSecure = "ssl";                  // enable SMTP authentication
-    $mail->Host       = "smtp.gmail.com";                  // set the SMTP server port
-     // SMTP server
-    $mail->Username   = "johnbillymarbella@gmail.com";   // SMTP server username
-    $mail->Password   = "ZAIDOBLACK";            // SMTP server passwor
-    $mail->Host       = "smtp.gmail.com";
-    $mail->Port       = 465;
+		    $body             = "Dear LIS-PGLU Administrator,<br><br>".
+		    				'Sorry Your Topic "'.$x->topic.'" Has Been Rejected for Some Reasons';
+		    $body             = preg_replace('/\\\\/','', $body); //Strip backslashes
 
-    $mail->AddReplyTo("johnbillymarbella@gmail.com","LIS-PGLU Administrator");
+		     $mail->IsSMTP();                           // tell the class to use SMTP
+		    $mail->SMTPAuth   = true;
+		    $mail->SMTPSecure = "ssl";                  // enable SMTP authentication
+		    $mail->Host       = "smtp.gmail.com";                  // set the SMTP server port
+		     // SMTP server
+		    $mail->Username   = "johnbillymarbella@gmail.com";   // SMTP server username
+		    $mail->Password   = "ZAIDOBLACK";            // SMTP server passwor
+		    $mail->Host       = "smtp.gmail.com";
+		    $mail->Port       = 465;
 
-    $mail->From       = "johnbillymarbella@gmail.com";
-    $mail->FromName   = "johnbillymarbella@gmail.com";
+		    $mail->AddReplyTo("johnbillymarbella@gmail.com","LIS-PGLU Administrator");
 
-    $to = $x->email;
+		    $mail->From       = "johnbillymarbella@gmail.com";
+		    $mail->FromName   = "johnbillymarbella@gmail.com";
 
-    $mail->AddAddress($to);
+		    $to = $x->email;
 
-    $mail->Subject  = $x->topic;
+		    $mail->AddAddress($to);
 
-    $mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
-    $mail->WordWrap   = 80; // set word wrap
+		    $mail->Subject  = $x->topic;
 
-    $mail->MsgHTML($body);
+		    $mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+		    $mail->WordWrap   = 80; // set word wrap
 
-    $mail->IsHTML(true); // send as HTML
+		    $mail->MsgHTML($body);
+
+		    $mail->IsHTML(true); // send as HTML
 
 				//send
-				if ($mail->Send()) {
-					$mail->ClearAddresses();
-					$user->setFlash('success',"<strong>Topic has been rejected</strong>");
-					date_default_timezone_set("Asia/Manila");
-		$activity=new Activity();
-		$activity->act_desc='Rejected Topic ID: '.$id;
-		$activity->act_datetime=date('Y-m-d G:i:s');
-		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-		$activity->save();
-				} else {
-					Yii::app()->user->setFlash('error','Error while sending email: '.$mail->ErrorInfo);
-				}
+			if ($mail->Send()) {
+
+				$mail->ClearAddresses();
+				$user->setFlash('success',"<strong>Topic has been rejected</strong>");
+
+				$activity=new Activity();
+				$activity->act_desc='Rejected Topic ID: '.$id;
+				$activity->act_datetime=date('Y-m-d G:i:s');
+				$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+				$activity->save();
+
+			} else {
+				Yii::app()->user->setFlash('error','Error while sending email: '.$mail->ErrorInfo);
 			}
+		}
+
 		$this->redirect(array('confirmTopic'));
 	}
 	public function actionConfirmTopic(){
-		date_default_timezone_set("Asia/Manila");
+
 		$activity=new Activity();
 		$activity->act_desc='Viewed Received Topics';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -170,21 +174,25 @@ $mail = new PHPMailer(true); //New instance, with exceptions enabled
 
 		$model=new ForumQuestion('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ForumQuestion']))
+
+		if(isset($_GET['ForumQuestion'])) {
 			$model->attributes=$_GET['ForumQuestion'];
+		}
 			
 		$this->render('confirmTopic',array(
 			'model'=>$model,
 		));
 	}
+
 	public function actionView($id)
 	{
-		date_default_timezone_set("Asia/Manila");
+
 		$activity=new Activity();
 		$activity->act_desc='Viewed Topic ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
 		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 		$activity->save();
+
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
@@ -197,21 +205,25 @@ $mail = new PHPMailer(true); //New instance, with exceptions enabled
 	public function actionCreate()
 	{
 		$model=new ForumQuestion;
-
+		exit;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['ForumQuestion']))
-		{
+		if(isset($_POST['ForumQuestion'])) {
+
 			$model->attributes=$_POST['ForumQuestion'];
-			if($model->save())
-				date_default_timezone_set("Asia/Manila");
-		$activity=new Activity();
-		$activity->act_desc='Added Another Topic';
-		$activity->act_datetime=date('Y-m-d G:i:s');
-		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-		$activity->save();
+
+			if($model->save()) {
+
+				$activity=new Activity();
+				$activity->act_desc='Added Another Topic';
+				$activity->act_datetime=date('Y-m-d G:i:s');
+				$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+				$activity->save();
+
 				$this->redirect(array('view','id'=>$model->id));
+			}
+		
 		}
 
 		$this->render('create',array(
@@ -231,17 +243,19 @@ $mail = new PHPMailer(true); //New instance, with exceptions enabled
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['ForumQuestion']))
-		{
+		if(isset($_POST['ForumQuestion'])) {
+
 			$model->attributes=$_POST['ForumQuestion'];
-			if($model->save())
-				date_default_timezone_set("Asia/Manila");
-		$activity=new Activity();
-		$activity->act_desc='Updated Topic ID: '.$id;
-		$activity->act_datetime=date('Y-m-d G:i:s');
-		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-		$activity->save();
-				$this->redirect(array('view','id'=>$model->id));
+
+			if($model->save()) {
+				$activity=new Activity();
+				$activity->act_desc='Updated Topic ID: '.$id;
+				$activity->act_datetime=date('Y-m-d G:i:s');
+				$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+				$activity->save();
+				$this->redirect(array('view','id'=>$model->id));		
+			}
+		
 		}
 
 		$this->render('update',array(
@@ -257,15 +271,15 @@ $mail = new PHPMailer(true); //New instance, with exceptions enabled
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
-		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Deleted Topic ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
 		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 		$activity->save();
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
+		if(!isset($_GET['ajax'])) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		}
 	}
 
 	/**
@@ -273,11 +287,7 @@ $mail = new PHPMailer(true); //New instance, with exceptions enabled
 	 */
 	public function actionIndex()
 	{
-		/*$dataProvider=new CActiveDataProvider('ForumQuestion');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));*/
-	$this->redirect(array('confirmTopic'));
+		$this->redirect(array('confirmTopic'));
 	}
 
 	/**
@@ -285,14 +295,15 @@ $mail = new PHPMailer(true); //New instance, with exceptions enabled
 	 */
 	public function actionAdmin()
 	{
-		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Topic List';
 		$activity->act_datetime=date('Y-m-d G:i:s');
 		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 		$activity->save();
+
 		$model=new ForumQuestion('search');
 		$model->unsetAttributes();  // clear any default values
+
 		if(isset($_GET['ForumQuestion']))
 			$model->attributes=$_GET['ForumQuestion'];
 
@@ -311,8 +322,9 @@ $mail = new PHPMailer(true); //New instance, with exceptions enabled
 	public function loadModel($id)
 	{
 		$model=ForumQuestion::model()->findByPk($id);
-		if($model===null)
+		if($model===null) {
 			throw new CHttpException(404,'The requested page does not exist.');
+		}
 		return $model;
 	}
 
