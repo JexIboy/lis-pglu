@@ -43,7 +43,7 @@ class OfficialsController extends Controller
 	 */
 	public function actionView($id)
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Official ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -69,7 +69,7 @@ class OfficialsController extends Controller
 		{
 			$model->attributes=$_POST['Officials'];
 			if($model->save() && $model->validate()){
-				date_default_timezone_set("Asia/Manila");
+				
 		$activity=new Activity();
 		$activity->act_desc='Added Another Official';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -100,7 +100,7 @@ class OfficialsController extends Controller
 		{
 			$model->attributes=$_POST['Officials'];
 			if($model->save())
-				date_default_timezone_set("Asia/Manila");
+				
 		$activity=new Activity();
 		$activity->act_desc='Updated Official ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -122,7 +122,7 @@ class OfficialsController extends Controller
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Deleted Official ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -150,7 +150,7 @@ class OfficialsController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Official List';
 		$activity->act_datetime=date('Y-m-d G:i:s');

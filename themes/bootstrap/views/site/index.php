@@ -3,7 +3,6 @@
 <div style="height:280px; width:98%;  margin-bottom:1%;" id="home_banner">
 	
 <?php
-date_default_timezone_set("Asia/Manila");
 
 echo "<h4 style='color:white; margin-left:1%;'> Today is " .date('F d, Y'). "</h4>";
 ?>

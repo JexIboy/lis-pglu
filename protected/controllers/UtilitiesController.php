@@ -96,7 +96,7 @@ class UtilitiesController extends Controller
 	}
 	
 	//save file
-	date_default_timezone_set("Asia/Manila");
+	
 	$file='db-backup('.date('Y-m-d').').sql';
 	$handle = fopen(Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.date('Y').'/'.$file,'w+');
 	fwrite($handle,$return);

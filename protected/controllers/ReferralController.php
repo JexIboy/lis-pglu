@@ -287,7 +287,7 @@ class ReferralController extends Controller
 	public function actionRetrieve($id)
 	{
 		Referral::model()->updateByPK($id,array('archive'=>0));
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Retrieved Referral ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');

@@ -21,10 +21,15 @@ class WebUser extends CWebUser
         // allow access if the operation request is the current user's role
         return ($operation === $role);
     }
+
     public function getFlashKeys()
-{
-    $counters=$this->getState(self::FLASH_COUNTERS);
-    if(!is_array($counters)) return array();
-    return array_keys($counters);
-}
+    {
+        $counters=$this->getState(self::FLASH_COUNTERS);
+        
+        if(!is_array($counters)) {
+            return array();
+        }
+        
+        return array_keys($counters);
+    }
 }

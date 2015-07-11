@@ -3416,7 +3416,7 @@ class TCPDF {
         $this->SetFont('helvetica', 'I', 8);
         // Page number
       //  $this->Write(0,'Page'.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), '', 0, 'C', true, 0, false, false, 0);
-    	date_default_timezone_set("Asia/Manila");
+    	
     	$tbl ='<div><table style="width:40%">';
     	$tbl .='<tr>
     		<td style="text-align:left;">Prepared By: </td>';

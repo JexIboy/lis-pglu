@@ -43,7 +43,7 @@ class CommitteeController extends Controller
 	 */
 	public function actionView($id)
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Committee ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -71,7 +71,7 @@ class CommitteeController extends Controller
 
 			$model->members=implode(',',$model->members);
 			if($model->save() && $model->validate()){
-				date_default_timezone_set("Asia/Manila");
+				
 		$activity=new Activity();
 		$activity->act_desc='Added a Committee';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -104,7 +104,7 @@ class CommitteeController extends Controller
 			
 			$model->members=implode(',',$model->members);
 			if($model->save())
-				date_default_timezone_set("Asia/Manila");
+				
 		$activity=new Activity();
 		$activity->act_desc='Updated Committee ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -126,7 +126,7 @@ class CommitteeController extends Controller
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Deleted Committee ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -154,7 +154,7 @@ class CommitteeController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Category List';
 		$activity->act_datetime=date('Y-m-d G:i:s');

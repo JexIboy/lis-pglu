@@ -50,7 +50,7 @@ class ReportsResolutionController extends Controller
 		$list=  Resolution::model()->findAll(array('condition' => 'author like :author and date_passed like :month',
                															   'params' => array(':author' =>'%'.$data[2].',%' , ':month'=>$my.'%'),));
         $author=  Officials::model()->findByPK($data[2]);
-        date_default_timezone_set("Asia/Manila");
+        
     $activity=new Activity();
     $activity->act_desc='Printed Monthly Authored Resolution of '.$author->emp->Fullname;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -60,7 +60,7 @@ class ReportsResolutionController extends Controller
         $this->renderPartial('printAuthoredResolutionMonthly',array('list'=>$list,'author'=>$author,'year'=>$data[0],'month'=>$data[1]));
 	}
 	public function actionAuthoredMonthlyResolution(){
-		date_default_timezone_set("Asia/Manila");
+		
     $activity=new Activity();
     $activity->act_desc='Searched Monthly Authored Resolution';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -94,7 +94,7 @@ foreach($x as $values =>$value) {
                         $my=$year.'-'.$month;
 			$auth_name = $_POST['auth_name'];
 
-              date_default_timezone_set("Asia/Manila");
+              
     $activity=new Activity();
     $activity->act_desc='Searched Monthly Authored Resolution of '.Officials::model()->findByPK($auth_name)->emp->Fullname;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -146,7 +146,7 @@ foreach($x as $values =>$value) {
 		$list=  Resolution::model()->findAll(array('condition' => 'author like :author and date_passed like :year',
                                                                            'params' => array(':author' =>'%'.$data[1].',%' , ':year'=>$data[0].'%'),));
                                      $author=  Officials::model()->findByPK($data[1]);
-                                     date_default_timezone_set("Asia/Manila");
+                                     
     $activity=new Activity();
     $activity->act_desc='Printed Yearly Authored Resolution of '.$author->emp->Fullname;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -155,7 +155,7 @@ foreach($x as $values =>$value) {
                                 $this->renderPartial('printAuthoredResolutionYearly',array('list'=>$list,'author'=>$author,'year'=>$data[0]));
 	}
 	public function actionAuthoredYearlyResolution(){
-		date_default_timezone_set("Asia/Manila");
+		
     $activity=new Activity();
     $activity->act_desc='Searched Yearly Authored Resolution';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -202,7 +202,7 @@ foreach($x as $values =>$value) {
                 'pageSize' => 10,
             ),
         ));
-		    date_default_timezone_set("Asia/Manila");
+		    
     $activity=new Activity();
     $activity->act_desc='Searched Yearly Authored Resolution of '.Officials::model()->findByPK($auth_name)->emp->Fullname;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -215,7 +215,7 @@ foreach($x as $values =>$value) {
 		));
 	}
 	public function actionHistoryResolution(){
-		date_default_timezone_set("Asia/Manila");
+		
         $activity=new Activity();
         $activity->act_desc='Searched Resolution History';
         $activity->act_datetime=date('Y-m-d G:i:s');
@@ -236,7 +236,7 @@ foreach($x as $values =>$value) {
     public function actionPrintResolutionHistory($model){
 
         $x=Resolution::model()->findByAttributes(array('res_no'=>$model));
-        date_default_timezone_set("Asia/Manila");
+        
     $activity=new Activity();
     $activity->act_desc='Printed Resolution History of Resolution No. '.$x->res_no;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -245,7 +245,7 @@ foreach($x as $values =>$value) {
         $this->renderPartial('PrintResolutionHistory',array('model'=>$x));
     }
 	public function actionYearlyResolution(){
-		date_default_timezone_set("Asia/Manila");
+		
     $activity=new Activity();
     $activity->act_desc='Searched Fiscal Yearly Resolution Report';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -276,7 +276,7 @@ foreach($x as $values =>$value) {
 			 $end_year=$fy[1];
 			 $start_year=$fy[0]; 
 
-			 date_default_timezone_set("Asia/Manila");
+			 
     $activity=new Activity();
     $activity->act_desc='Searched Fiscal Yearly '.$start_year.' - '.$end_year.' Resolution Report';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -307,7 +307,7 @@ foreach($x as $values =>$value) {
                 									 'order' => 'date_passed ASC',
                 									 'params' => array(':start_date' => $start_year,':end_date' => $end_year, ),));
                               
-        date_default_timezone_set("Asia/Manila");
+        
     $activity=new Activity();
     $activity->act_desc='Printed Fiscal Yearly '.$start_year.' - '.$end_year.' Resolution Report';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -317,7 +317,7 @@ foreach($x as $values =>$value) {
         $this->renderPartial('printYearlyResolution',array('details'=>$details,'start_year'=>$start_year,'end_year'=>$end_year));
 	}
 	public function actionMonthlyResolution(){
-date_default_timezone_set("Asia/Manila");
+
     $activity=new Activity();
     $activity->act_desc='Searched Monthly Resolution Report';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -350,7 +350,7 @@ date_default_timezone_set("Asia/Manila");
 
 				$MY=$year.'-'.$month;  
 
-				date_default_timezone_set("Asia/Manila");
+				
     $activity=new Activity();
     $activity->act_desc='Searched '.$month.' '.$year.' Resolution Report';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -381,7 +381,7 @@ date_default_timezone_set("Asia/Manila");
                                                                             'order' => 'date_passed ASC',
                                                                             'params' => array(':date' => $model ."%", ),));
                               
-         date_default_timezone_set("Asia/Manila");
+         
     $activity=new Activity();
     $activity->act_desc='Printed'.$model.' Resolution Report';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -390,7 +390,7 @@ date_default_timezone_set("Asia/Manila");
                                 $this->renderPartial('printMonthlyResolution',array('details'=>$details,'month'=>$my[1],'year'=>$my[0]));
     }
 	public function actionIndex(){
-		date_default_timezone_set("Asia/Manila");
+		
     $activity=new Activity();
     $activity->act_desc='Searched Statistical Resolution Report';
     $activity->act_datetime=date('Y-m-d G:i:s');

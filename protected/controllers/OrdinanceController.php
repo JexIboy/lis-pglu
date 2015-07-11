@@ -80,7 +80,7 @@ class OrdinanceController extends Controller
                 //-------------------------------------------------
                 
 			if($model->save() && $model->validate()){
-				date_default_timezone_set("Asia/Manila");
+				
 				$activity=new Activity();
 				$activity->act_desc='Added Another Ordinance';
 				$activity->act_datetime=date('Y-m-d G:i:s');
@@ -97,7 +97,7 @@ class OrdinanceController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionOrdinanceList(){
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Committee Meeting List for Ordinance';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -115,7 +115,7 @@ class OrdinanceController extends Controller
 	}
 	public function actionView($id)
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Ordinance No. '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -132,7 +132,7 @@ class OrdinanceController extends Controller
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionDownload($id){
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Downloaded Ordinance No. '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -216,7 +216,7 @@ class OrdinanceController extends Controller
 						CommMeetingOrdi::model()->updateByPK($model->meeting_ordi_id,array('comm_meeting_stat'=>1,'ord_remark'=>1));
 						
 			if($model->save() && $model->validate())
-				date_default_timezone_set("Asia/Manila");
+				
 		$activity=new Activity();
 		$activity->act_desc='Added Another Ordinance';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -271,7 +271,7 @@ class OrdinanceController extends Controller
                 $model->imp_agency=implode(',',$model->imp_agency);
                 $model->input_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 			if($model->save())
-				date_default_timezone_set("Asia/Manila");
+				
 		$activity=new Activity();
 		$activity->act_desc='Updated Ordinance No. '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -297,7 +297,7 @@ class OrdinanceController extends Controller
 		$x=Ordinance::model()->findByPK($id);
 		$x->archive=1;
 		$x->save();
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Archived Ordinance No. '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -313,7 +313,7 @@ class OrdinanceController extends Controller
 		$x=Ordinance::model()->findByPK($id);
 		$x->archive=0;
 		$x->save();
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Retrieved Ordinance No.  '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -341,7 +341,7 @@ class OrdinanceController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Ordinance List';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -374,7 +374,7 @@ class OrdinanceController extends Controller
 
 	public function actionViewArchive()
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Archived Ordinance List';
 		$activity->act_datetime=date('Y-m-d G:i:s');

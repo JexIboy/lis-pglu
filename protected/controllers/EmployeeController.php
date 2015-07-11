@@ -43,7 +43,7 @@ class EmployeeController extends Controller
 	 */
 	public function actionView($id)
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Employee ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -69,7 +69,7 @@ class EmployeeController extends Controller
 		{
 			$model->attributes=$_POST['Employee'];
 			if($model->save())
-				date_default_timezone_set("Asia/Manila");
+				
 		$activity=new Activity();
 		$activity->act_desc='Added Another Employee';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -99,7 +99,7 @@ class EmployeeController extends Controller
 		{
 			$model->attributes=$_POST['Employee'];
 			if($model->save())
-				date_default_timezone_set("Asia/Manila");
+				
 		$activity=new Activity();
 		$activity->act_desc='Updated Employee ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -121,7 +121,7 @@ class EmployeeController extends Controller
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Deleted Employee ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -149,7 +149,7 @@ class EmployeeController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Employee List';
 		$activity->act_datetime=date('Y-m-d G:i:s');
