@@ -190,6 +190,7 @@ public function refdue()
 
 		return Referral::model()->findAll($criteria);
 	}
+	
 	public function forCommMeetingReso()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
@@ -218,7 +219,8 @@ public function refdue()
             ),
 		));
 	}
-	public function countCommMeetingOrdi(){
+	public function countCommMeetingOrdi()
+	{
 		$cat = Category::model()->findByAttributes(array('cat_name'=>'Provincial Ordinance'))->cat_id;
 		$result = CHtml::listData(Communication::model()->findAll(array('condition'=>'cat_id = '.$cat.' and comm_stat=1')),'ctrl_no','ctrl_no');
 		
@@ -227,8 +229,10 @@ public function refdue()
 		$criteria->condition='archive=0 and referral_stat=0';
 		$criteria->addInCondition("ctrl_no", $result);
 		$criteria->compare('ctrl_no',$this->ctrl_no,true);
+
 		return Referral::model()->findAll($criteria);
 	}
+
 	public function forCommMeetingOrdi()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
@@ -270,43 +274,57 @@ public function refdue()
 	}
 	
 	public function getJoints(){
-            if(!empty($this->joint_committee)){
-            $x=explode(',',$this->joint_committee);
-            $names='';
-            foreach($x as $value){
-            $criteria=new CDbCriteria;
-            $criteria->condition='comm_id=:postID';
-            $criteria->params=array(':postID'=>$value);
-            $IA=  Committee::model()->find($criteria);
-            $names=$names.$IA['comm_name'].'<br/><br/>';
-            }
-             echo $names;
-         	}
-             else{
-                 echo 'No Joint Committee';
-             }
+        if(!empty($this->joint_committee)){
+	        $x=explode(',',$this->joint_committee);
+	        $names='';
+
+	        foreach($x as $value){
+		        $criteria=new CDbCriteria;
+		        $criteria->condition='comm_id=:postID';
+		        $criteria->params=array(':postID'=>$value);
+		        $IA=  Committee::model()->find($criteria);
+		        $names=$names.$IA['comm_name'].'<br/><br/>';
+	        }
+	        
+	        echo $names;
+
+     	} else {
+            echo 'No Joint Committee';
         }
+    }
 
 
     public function getJointsView(){
-             if(!empty($this->joint_committee)){
-            $x=explode(',',$this->joint_committee);
-            $names='';
-            foreach($x as $value){
-            $criteria=new CDbCriteria;
-            $criteria->condition='comm_id=:postID';
-            $criteria->params=array(':postID'=>$value);
-            $IA=  Committee::model()->find($criteria);
-            $names=$names.'('.$IA['comm_name'].')';
-            }
-             return $names;
-         	}
-             else{
-                 return 'No Joint Committee';
-             }
-        }
+        if(!empty($this->joint_committee)){
+	        $x=explode(',',$this->joint_committee);
+	        $names='';
 
-    
+	        foreach($x as $value){
+		        $criteria=new CDbCriteria;
+		        $criteria->condition='comm_id=:postID';
+		        $criteria->params=array(':postID'=>$value);
+		        $IA=  Committee::model()->find($criteria);
+		        $names=$names.'('.$IA['comm_name'].')';
+	        }
+	    
+	        return $names;
+     	
+     	} else {
+            return 'No Joint Committee';
+        }
+    }
+
+    public function getCommDetailsByRefId ($ref_id) {
+		$details = Yii::app()->db
+				->createCommand()
+			    ->select('*')
+			    ->from('tbl_referral r')
+			    ->join('tbl_communication c', 'c.ctrl_no = r.ctrl_no')
+			    ->where('r.ref_id = :ref_id', array(':ref_id'=>$ref_id))
+			    ->queryRow();
+
+		return $details;
+	}
 
     
 }

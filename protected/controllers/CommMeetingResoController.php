@@ -28,11 +28,11 @@ class CommMeetingResoController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('download','viewArchive','retrieve','index','view','create','update','admin','CommMeetingList'),
-				'roles'=>array('SCR-RF'),
+				'actions'=>array('download','viewArchive','retrieve','index','view','create','update','admin','CommMeetingList', 'getCommDetails'),
+				'roles'=>array('SCR-RF', 'SYSAD'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('download','viewArchive','retrieve','delete'),
+				'actions'=>array('viewArchive','delete'),
 				'roles'=>array('SYSAD'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -45,31 +45,30 @@ class CommMeetingResoController extends Controller
 		);
 	}
 	public function actionDownload($id){
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Downloaded Committee Report File';
 		$activity->act_datetime=date('Y-m-d G:i:s');
 		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 		$activity->save();
 
-            $model = CommMeetingReso::model()->findByPK($id);
-            $year=substr($model->ref->ctrl_no, 0,4);
-            $file= $model->comm_rep_file;
+        $model = CommMeetingReso::model()->findByPK($id);
+        $year=substr($model->ref->ctrl_no, 0,4);
+        $file= $model->comm_rep_file;
+
         if (file_exists(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingReso/'.$year.'/'.$model->ref->ctrl_no.'/'.$file)) {
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename='.basename(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingReso/'.$year.'/'.$model->ref->ctrl_no.'/'.$file));
-    header('Content-Transfer-Encoding: binary');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingReso/'.$year.'/'.$model->ref->ctrl_no.'/'.$file));
-    ob_clean();
-    flush();
-    readfile(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingReso/'.$year.'/'.$model->ref->ctrl_no.'/'.$file);
-    exit;
-		}else{
-			
+		    header('Content-Description: File Transfer');
+		    header('Content-Type: application/octet-stream');
+		    header('Content-Disposition: attachment; filename='.basename(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingReso/'.$year.'/'.$model->ref->ctrl_no.'/'.$file));
+		    header('Content-Transfer-Encoding: binary');
+		    header('Expires: 0');
+		    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		    header('Pragma: public');
+		    header('Content-Length: ' . filesize(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingReso/'.$year.'/'.$model->ref->ctrl_no.'/'.$file));
+		    ob_clean();
+		    flush();
+		    readfile(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingReso/'.$year.'/'.$model->ref->ctrl_no.'/'.$file);
+		    exit;
 		}	
 	}
 	/**
@@ -77,7 +76,7 @@ class CommMeetingResoController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionCommMeetingList(){
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed List of Referral for Committee Meeting';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -86,23 +85,27 @@ class CommMeetingResoController extends Controller
 
 		$model=new Referral('forCommMeetingReso');
 		$model->unsetAttributes();  // clear any default values
+
 		if(isset($_GET['Referral']))
 			$model->attributes=$_GET['Referral'];
 
 			if(!empty($model->joint_committee)){
-                        $x=implode(',',$model->joint_committee);
-                        $model->joint_committee=$x;
-                        }
-                        else{
-                            $model->joint_committee='';
-                        }
+
+                $x=implode(',',$model->joint_committee);
+                $model->joint_committee=$x;
+
+        } else {
+            $model->joint_committee='';
+        }
+
 		$this->render('commMeetingList',array(
 			'model'=>$model,
 		));
 	}
+
 	public function actionView($id)
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Committee Meeting ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -114,40 +117,41 @@ class CommMeetingResoController extends Controller
 		{
 			$model->attributes=$_POST['CommMeetingReso'];
 			$picture_name='';
-                $picture_file = CUploadedFile::getInstance($model,'comm_rep_file');
-                $model->comm_rep_file=$picture_file;
+            $picture_file = CUploadedFile::getInstance($model,'comm_rep_file');
+            $model->comm_rep_file=$picture_file;
 
 			if($picture_file){ 
-                $picture_name = $picture_file->name;
-                          if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y'))){
-                          	 mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y'));
-                             mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no);
-                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
+	            $picture_name = $picture_file->name;
 
-                            }
-                            else{
-                            	mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no);
-                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
-                            }
+              	if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y'))){
+	              	mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y'));
+	                mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no);
+	                $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
+
+                } else{
+                	mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no);
+                	$picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
                 }
+            }
 
-							if($model->save()){
-								date_default_timezone_set("Asia/Manila");
-		$activity=new Activity();
-		$activity->act_desc='Assigned Date of Committe Report of Committee Meeting ID: '.$id;
-		$activity->act_datetime=date('Y-m-d G:i:s');
-		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-		$activity->save();
+			if($model->save()) {
+									
+				$activity=new Activity();
+				$activity->act_desc='Assigned Date of Committe Report of Committee Meeting ID: '.$id;
+				$activity->act_datetime=date('Y-m-d G:i:s');
+				$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+				$activity->save();
 
-		if($model->action_taken!=0){
-				$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ref->ctrl_no));
-				$stat->comm_meeting_stat=1;
-				$stat->referral_stat=1;
-				$stat->save();
+				if($model->action_taken!=0) {
+					$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ref->ctrl_no));
+					$stat->comm_meeting_stat=1;
+					$stat->referral_stat=1;
+					$stat->save();
 
-				Referral::model()->updateByPK($model->ref_id,array('referral_stat'=>1));
+					Referral::model()->updateByPK($model->ref_id,array('referral_stat'=>1));
+				}
 			}
-		}
+
 			$this->redirect(array('view','id'=>$model->meeting_reso_id));
 					
 		}
@@ -171,35 +175,34 @@ class CommMeetingResoController extends Controller
 
 		if(isset($_POST['CommMeetingReso']))
 		{
-				$model->attributes=$_POST['CommMeetingReso'];
-				$x=Referral::model()->findByAttributes(array('ctrl_no'=>$model->ref_id))->ref_id;
-				$model->ref_id=$x;
-				$model->archive=0;
-			if($model->action_taken!=0){$model->comm_meeting_stat=1;}
-			else{$model->comm_meeting_stat=0;}
-				$model->remark=0;
-	            $model->input_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+			$model->attributes=$_POST['CommMeetingReso'];
+			$x=Referral::model()->findByAttributes(array('ctrl_no'=>$model->ref_id))->ref_id;
+			$model->ref_id=$x;
+			$model->archive=0;
 
-	            $picture_name='';
-                $picture_file = CUploadedFile::getInstance($model,'comm_rep_file');
-                $model->comm_rep_file=$picture_file;
+			$model->comm_meeting_stat= $model->action_taken!=0 ? 1 : 0;
+			$model->remark=0;
+            $model->input_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+
+            $picture_name='';
+            $picture_file = CUploadedFile::getInstance($model,'comm_rep_file');
+            $model->comm_rep_file=$picture_file;
                 
 			if($picture_file){ 
                 $picture_name = $picture_file->name;
-                         if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4))){
-                          	 mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4));
-                             mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4).'/'.$model->ref->ctrl_no);
-                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4).'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
+				if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4))){
+					mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4));
+					mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4).'/'.$model->ref->ctrl_no);
+					$picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4).'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
 
-                            }
-                            else{
-                            	mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4).'/'.$model->ref->ctrl_no);
-                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4).'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
-                            }
-                }
+				} else{
+					mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4).'/'.$model->ref->ctrl_no);
+					$picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.substr($model->ctrl_no,0,4).'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
+				}
+            }
+
 			if($model->save()){
-				date_default_timezone_set("Asia/Manila");
-			
+							
 				$activity=new Activity();
 				$activity->act_desc='Added Another Committee Meeting';
 				$activity->act_datetime=date('Y-m-d G:i:s');
@@ -235,20 +238,23 @@ class CommMeetingResoController extends Controller
 			$ref_id = Referral::model()->findByAttributes(array('ctrl_no' => $model->ref_id))->ref_id;
 			$model->ref_id = $ref_id;
 			$model->remark=0;
-			if($model->action_taken!=1){
+
+			if($model->action_taken!=1) {
+
 				Status::model()->updateAll(array('referral_stat' => 1), 'ctrl_no = ' . $model->ref->ctrl_no);
 				Referral::model()->updateByPK($model->ref_id,array('referral_stat'=>1));
 				$stat->save();
 			
-			}
-			else if($model->action_taken!=0){
+			} else if($model->action_taken!=0){
+
 				$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ref->ctrl_no));
 				$stat->comm_meeting_stat=1;
 				$stat->referral_stat=1;
 				$stat->save();
 				Referral::model()->updateByPK($model->ref_id,array('referral_stat'=>0));
 			
-			}else{
+			} else {
+
 				$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ref->ctrl_no));
 				$stat->comm_meeting_stat=0;
 				$stat->referral_stat=0;
@@ -257,24 +263,26 @@ class CommMeetingResoController extends Controller
 			}
 
 			$picture_name='asdfdsaf';
-                $picture_file = CUploadedFile::getInstance($model,'comm_rep_file');
-                $model->comm_rep_file=$picture_file;
+            $picture_file = CUploadedFile::getInstance($model,'comm_rep_file');
+            $model->comm_rep_file=$picture_file;
                 
-			if($picture_file){ 
+			if($picture_file) { 
                 $picture_name = $picture_file->name;
-                         if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y'))){
-                          	 mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y'));
-                             mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no);
-                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
+				if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y'))){
+					
+					mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y'));
+					mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no);
+					$picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
+				
+				} else{
+					
+					mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no);
+					$picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
+				
+				}
+            }
 
-                            }
-                            else{
-                            	mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no);
-                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingReso/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
-                            }
-                }
 			if($model->save() && $model->validate()){
-				date_default_timezone_set("Asia/Manila");
 			
 				$activity=new Activity();
 				$activity->act_desc='Updated Committee Meeting ID: '.$id;
@@ -282,7 +290,6 @@ class CommMeetingResoController extends Controller
 				$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 				$activity->save();
 
-				
 				$this->redirect(array('view','id'=>$model->meeting_reso_id));
 			}
 		}
@@ -303,7 +310,7 @@ class CommMeetingResoController extends Controller
 		$x=CommMeetingReso::model()->findByPK($id);
 		$x->archive=0;
 		$x->save();
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Retrieved Committee Meeting ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -319,7 +326,7 @@ class CommMeetingResoController extends Controller
 		$x=CommMeetingReso::model()->findByPK($id);
 		$x->archive=1;
 		$x->save();
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Archived Committee Meeting ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -335,10 +342,6 @@ class CommMeetingResoController extends Controller
 	 */
 	public function actionIndex()
 	{
-		/*$dataProvider=new CActiveDataProvider('CommMeetingReso');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));*/
 		$this->redirect(array('admin'));
 	}
 
@@ -347,7 +350,7 @@ class CommMeetingResoController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Committee Meeting List';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -365,7 +368,7 @@ class CommMeetingResoController extends Controller
 
 	public function actionViewArchive()
 	{
-		date_default_timezone_set("Asia/Manila");
+		
 		$activity=new Activity();
 		$activity->act_desc='Viewed Archived Committee Meeting List';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -380,6 +383,10 @@ class CommMeetingResoController extends Controller
 		$this->render('viewArchive',array(
 			'model'=>$model,
 		));
+	}
+
+	public function actionGetCommDetails($ref_id) {
+		echo CJSON::encode(Referral::getCommDetailsByRefId($ref_id));
 	}
 
 	/**

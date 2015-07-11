@@ -79,16 +79,17 @@ $form = $this->beginWidget ( 'bootstrap.widgets.TbActiveForm', array (
 </div>
 <script type="text/javascript">    
     
-    $(document).ready(function(){
-    	$.get("themes/bootstrap/views/commMeetingOrdi/_viewDetails.php",
-                  "ref_id="+$("[id*=ref_id]").val(),
-                 function(html){
-                     output=html.toString().split("é");
-                     $("[id*=subject_matter]").val(output[0]);
-                     $("[id*=ref_id]").val(output[1]);
-                 });
-        
-        
-      });
+	$(document).ready(function(){
+		$.ajax({
+			url  : 'index.php?r=commMeetingOrdi/getCommDetails',
+			data : {ref_id : $("[id*=ref_id]").val()},
+			dataType : 'json',
+			success : function (result) {
+				$("#CommMeetingOrdi_subject_matter").val(result.subject_matter);
+	            $("#CommMeetingOrdi_ref_id").val(result.ref_id);
+			}
+		});     
+	    
+	});
       
 </script>

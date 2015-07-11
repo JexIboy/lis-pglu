@@ -7,7 +7,6 @@ class SysbackupController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-
 	/**
 	 * @return array action filters
 	 */
@@ -36,108 +35,115 @@ class SysbackupController extends Controller
 			),
 		);
 	}
+
 	public function actionDownload($id){
-		date_default_timezone_set("Asia/Manila");
+
 		$activity=new Activity();
 		$activity->act_desc='Downloaded Database File';
 		$activity->act_datetime=date('Y-m-d G:i:s');
 		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 		$activity->save();
 
-            $model = Sysbackup::model()->findByPK($id);
-            $year=substr($model->date_backed_up, 0,4);
-            $file= $model->db_name;
-        if (file_exists(Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.$year.'/'.$file)) {
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename='.basename(Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.$year.'/'.$file));
-    header('Content-Transfer-Encoding: binary');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize(Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.$year.'/'.$file));
-    ob_clean();
-    flush();
-    readfile(Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.$year.'/'.$file);
-    exit;
-		}else{
-			
+        $model = Sysbackup::model()->findByPK($id);
+        $year=substr($model->date_backed_up, 0,4);
+        $file= $model->db_name;
+
+        if (file_exists($this->dbaseDirectory.$year.'/'.$file)) {
+		    header('Content-Description: File Transfer');
+		    header('Content-Type: application/octet-stream');
+		    header('Content-Disposition: attachment; filename='.basename(Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.$year.'/'.$file));
+		    header('Content-Transfer-Encoding: binary');
+		    header('Expires: 0');
+		    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		    header('Pragma: public');
+		    header('Content-Length: ' . filesize($this->dbaseDirectory.$year.'/'.$file));
+		    ob_clean();
+		    flush();
+		    readfile(Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.$year.'/'.$file);
+		    exit;
 		}	
 	}
+
 	public function actionSysBackup(){
-		$return='';
-		$host='127.0.0.1';
-		$user='root';
-		$pass='';
-		$name='lis-pglu';
-		$tables = '*';
-		$link = mysql_connect($host,$user,$pass);
-		mysql_select_db($name,$link);
-		mysql_query("SET NAMES 'utf8'");
+		$dbConfig 	= Yii::app()->db;
+
+		$return 	='';
+		$dsn 	  = $dbConfig->connectionString;
+		$username = $dbConfig->username;
+		$password = $dbConfig->password;
+		$options  = array(
+		    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+		); 
+
+		$dbh = new PDO($dsn, $username, $password, $options);
 		
-		//get all of the tables
-		if($tables == '*')
-		{
-			$tables = array();
-			$result = mysql_query('SHOW TABLES');
-			while($row = mysql_fetch_row($result))
-			{
-				$tables[] = $row[0];
-			}
+
+		$tables = array();
+		$result = $dbh->prepare('SHOW TABLES');
+		$result->execute();
+
+		while($row = $result->fetch()) {
+			$tables[] = $row[0];
 		}
-		else
-		{
-			$tables = is_array($tables) ? $tables : explode(',',$tables);
-		}
-		$return='';
-		//cycle through
-		foreach($tables as $table)
-		{
-			$result = mysql_query('SELECT * FROM '.$table);
-			$num_fields = mysql_num_fields($result);
-			
+		
+		$return = '';
+
+		foreach($tables as $table) {
+			$result = $dbh->query('SELECT * FROM '.$table);
+			$num_fields = $result->columnCount();
+
 			$return.= 'DROP TABLE '.$table.';';
-			$row2 = mysql_fetch_row(mysql_query('SHOW CREATE TABLE '.$table));
-			$return.= "\n\n".$row2[1].";\n\n";
+
+			$createTable = $dbh->query('SHOW CREATE TABLE '.$table);
+			$createTable->execute();
+			$row2 = $createTable->fetch();
+			$return .= "\n\n".$row2[1].";\n\n";
 			
-			for ($i = 0; $i < $num_fields; $i++) 
-			{
-				while($row = mysql_fetch_row($result))
-				{
+			for ($i = 0; $i < $num_fields; $i++) {
+				while($row = $result->fetch()) {
 					$return.= 'INSERT INTO '.$table.' VALUES(';
-					for($j=0; $j<$num_fields; $j++) 
-					{
+
+					for($j=0; $j<$num_fields; $j++) {
 						$row[$j] = addslashes($row[$j]);
 						$row[$j] = str_replace("\n","\\n",$row[$j]);
-						if (isset($row[$j])) { $return.= '"'.$row[$j].'"' ; } else { $return.= '""'; }
-						if ($j<($num_fields-1)) { $return.= ','; }
+
+						$return .= isset($row[$j]) ? '"'.$row[$j].'"' : '""';
+						
+						if ($j<($num_fields-1)) { 
+							$return .= ','; 
+						}
 					}
+
 					$return.= ");\n";
 				}
 			}
 			$return.="\n\n\n";
 		}
 		
-					if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.date('Y'))){
-	                	mkdir(Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.date('Y'));
-	                }
-
-		//save file
-		date_default_timezone_set("Asia/Manila");
 		$file='db-backup('.date('Y-m-d').').sql';
-		$handle = fopen(Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.date('Y').'/'.$file,'w+');
+		$dbaseDirectory = Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/';
+		
+		if (!file_exists($dbaseDirectory)) {
+			mkdir($dbaseDirectory, 0777, true);
+		}
+
+		if(!is_dir($dbaseDirectory.date('Y'))){
+        	mkdir($dbaseDirectory.date('Y'));
+        }
+
+		$handle = fopen($dbaseDirectory.date('Y').'/'.$file,'w+');
 		fwrite($handle,$return);
 		fclose($handle);
 	
 		$user = Yii::app()->getComponent('user');
-    	if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.date('Y').'/'.$file)){
+
+    	if(!is_dir($dbaseDirectory.date('Y').'/'.$file)){
         	$system=new Sysbackup();
         	$system->db_name=$file;
         	$system->date_backed_up=date('Y-m-d G:i:s');
         	$system->backed_up_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
         	$system->save();
 
-        	date_default_timezone_set("Asia/Manila");
 			$activity=new Activity();
 			$activity->act_desc='Backed-up System';
 			$activity->act_datetime=date('Y-m-d G:i:s');
@@ -146,9 +152,7 @@ class SysbackupController extends Controller
 
         	$user->setFlash('success',"<strong>System Has Been Successfully Backed-up</strong>");
 
-         }
-        else{
-        	date_default_timezone_set("Asia/Manila");
+        } else {
 			$activity=new Activity();
 			$activity->act_desc='Failed to Backed-up System';
 			$activity->act_datetime=date('Y-m-d G:i:s');
@@ -157,89 +161,52 @@ class SysbackupController extends Controller
 
             $user->setFlash('error','<strong>Sorry Something Wrong While Processing the System Backup</strong>');
         }
+
         $activity=new Activity();
 		$this->redirect(array('admin'));
 	}
 
-	public function actionSysRestore($id){
+	public function actionSysRestore($id) {
+		$dbConfig 	= Yii::app()->db;
+
+		$dsn 	  = $dbConfig->connectionString;
+		$username = $dbConfig->username;
+		$password = $dbConfig->password;
+		$options  = array(
+		    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+		); 
+
+		$dbh = new PDO($dsn, $username, $password, $options);
 		$model=Sysbackup::model()->findByPK($id);
 		$filename = Yii::getPathOfAlias('webroot').'/protected/dBaseBackup/'.substr($model->date_backed_up, 0,4).'/'.$model->db_name;	 
   	
-//$filename = 'C:\test_legit.sql';
-$mysql_host = 'localhost';
-$mysql_username = 'root';
-$mysql_password = '';
-$mysql_database = 'lis-pglu';
- 
-//////////////////////////////////////////////////////////////////////////////////////////////
- 
-// Connect to MySQL server
-mysql_connect($mysql_host, $mysql_username, $mysql_password) or die('Error connecting to MySQL server: ' . mysql_error());
-// Select database
-mysql_select_db($mysql_database) or die('Error selecting MySQL database: ' . mysql_error());
- /*
-mysql_query("TRUNCATE tbl_activity");
-mysql_query("TRUNCATE tbl_agency");
-mysql_query("TRUNCATE tbl_agenda");
-mysql_query("TRUNCATE tbl_category");
-mysql_query("TRUNCATE tbl_committee");
-mysql_query("TRUNCATE tbl_comm_meeting_ordi");
-mysql_query("TRUNCATE tbl_comm_meeting_reso");
-mysql_query("TRUNCATE tbl_communication");
-mysql_query("TRUNCATE tbl_department");
-mysql_query("TRUNCATE tbl_employee");
-mysql_query("TRUNCATE forum_answer");
-mysql_query("TRUNCATE forum_question");
-mysql_query("TRUNCATE tbl_monitor_ord");
-mysql_query("TRUNCATE tbl_officials");
-mysql_query("TRUNCATE tbl_ordinance");
-mysql_query("TRUNCATE tbl_origin");
-mysql_query("TRUNCATE tbl_photo");
-mysql_query("TRUNCATE tbl_photo_gallery");
-mysql_query("TRUNCATE tbl_position");
-mysql_query("TRUNCATE tbl_referral");
-mysql_query("TRUNCATE tbl_resolution");
-mysql_query("TRUNCATE tbl_status");
-mysql_query("TRUNCATE tbl_sys_backup");
-mysql_query("TRUNCATE tbl_user");*/
+		$templine = '';
+		$lines = file($filename);
+		foreach ($lines as $line) {
 
-// Temporary variable, used to store current query
-$templine = '';
-// Read in entire file
-$lines = file($filename);
-// Loop through each line
-foreach ($lines as $line)
-{
-    // Skip it if it's a comment
-    if (substr($line, 0, 2) == '--' || $line == '')
-        continue;
- 
-    // Add this line to the current segment
-    $templine .= $line;
-    // If it has a semicolon at the end, it's the end of the query
-    if (substr(trim($line), -1, 1) == ';')
-    {
-        // Perform the query
-        mysql_query($templine);
-        // Reset temp variable to empty
-        $templine = '';
-    }
-}
+		    if (substr($line, 0, 2) == '--' || $line == '') {
+		        continue;
+		    }
 
-					
-					date_default_timezone_set("Asia/Manila");
-					$activity=new Activity();
-					$activity->act_desc='Restored System';
-					$activity->act_datetime=date('Y-m-d G:i:s');
-					$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-					$activity->save();
+		    $templine .= $line;
 
-					$user = Yii::app()->getComponent('user');
-                	$user->setFlash('success',"<strong>System Has Been Successfully Restored</strong>");
-                	$this->redirect(array('admin'));
-}		
-	
+		    if (substr(trim($line), -1, 1) == ';') {
+		    	$query = $dbh->prepare($templine);
+		        $query->execute();
+		        $templine = '';
+		    }
+		}
+		
+		$activity=new Activity();
+		$activity->act_desc='Restored System';
+		$activity->act_datetime=date('Y-m-d G:i:s');
+		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+		$activity->save();
 
+		$user = Yii::app()->getComponent('user');
+    	$user->setFlash('success',"<strong>System Has Been Successfully Restored</strong>");
+    	$this->redirect(array('admin'));
+	}		
 	
 	/**
 	 * Displays a particular model.
@@ -318,11 +285,7 @@ foreach ($lines as $line)
 	 */
 	public function actionIndex()
 	{
-		/*$dataProvider=new CActiveDataProvider('Sysbackup');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));*/
-$this->redirect(array('admin'));
+		$this->redirect(array('admin'));
 	}
 
 	/**
@@ -330,7 +293,6 @@ $this->redirect(array('admin'));
 	 */
 	public function actionAdmin()
 	{
-		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Backed-up System List';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -339,6 +301,7 @@ $this->redirect(array('admin'));
 
 		$model=new Sysbackup('search');
 		$model->unsetAttributes();  // clear any default values
+
 		if(isset($_GET['Sysbackup']))
 			$model->attributes=$_GET['Sysbackup'];
 

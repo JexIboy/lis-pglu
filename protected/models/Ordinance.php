@@ -166,108 +166,124 @@ class Ordinance extends CActiveRecord
 		
 		$result = !empty($meeting_ordi_id) ? CommMeetingOrdi::model()->findByPK($meeting_ordi_id)->ref->ctrlNo->orig->orig_name : 'Unknown Origin';
 		return $result;
-		
-
-
 	}
 
 	public function getAuthor(){
-            $x=explode(',',$this->author);
-            $names='';
-            foreach($x as $value){
-            $criteria=new CDbCriteria;
-            $criteria->condition='off_id=:postID';
-            $criteria->params=array(':postID'=>$value);
-            $auth=  Officials::model()->find($criteria);
+
+        $x=explode(',',$this->author);
+        $names='';
+
+        foreach($x as $value){
+	        $criteria=new CDbCriteria;
+	        $criteria->condition='off_id=:postID';
+	        $criteria->params=array(':postID'=>$value);
+	        $auth=  Officials::model()->find($criteria);
+	        
+	        echo $auth->Fullname.'<br/>';
             
-            echo $auth->Fullname.'<br/>';
-                
-            }
         }
+    }
+
     public function getAuthorView(){
-            $x=explode(',',$this->author);
-            $names='';
-            foreach($x as $value){
-            $criteria=new CDbCriteria;
-            $criteria->condition='off_id=:postID';
-            $criteria->params=array(':postID'=>$value);
-            $auth=  Officials::model()->find($criteria);
-            $names='('.$auth->Fullname.')'.$names;
-            }
-            return $names;
+
+        $x=explode(',',$this->author);
+        $names='';
+
+        foreach($x as $value){
+	        $criteria=new CDbCriteria;
+	        $criteria->condition='off_id=:postID';
+	        $criteria->params=array(':postID'=>$value);
+	        $auth=  Officials::model()->find($criteria);
+	        $names='('.$auth->Fullname.')'.$names;
         }
-        public function getAgency(){
-            $x=explode(',',$this->imp_agency);
-            $names='';
-            foreach($x as $value){
-            $criteria=new CDbCriteria;
-            $criteria->condition='agency_id=:postID';
-            $criteria->params=array(':postID'=>$value);
-            $auth=  Agency::model()->find($criteria);
+
+        return $names;
+    }
+
+    public function getAgency(){
+
+        $x=explode(',',$this->imp_agency);
+        $names='';
+
+        foreach($x as $value){
+	        $criteria=new CDbCriteria;
+	        $criteria->condition='agency_id=:postID';
+	        $criteria->params=array(':postID'=>$value);
+	        $auth=  Agency::model()->find($criteria);
+	        
+	        echo $auth->agency_name.'<br/>';
             
-            echo $auth->agency_name.'<br/>';
-                
-            }
         }
+    }
+
     public function getAgencyView(){
-            $x=explode(',',$this->imp_agency);
-            $names='';
-            foreach($x as $value){
-            $criteria=new CDbCriteria;
-            $criteria->condition='agency_id=:postID';
-            $criteria->params=array(':postID'=>$value);
-            $auth=  Agency::model()->find($criteria);
-            $names='('.$auth->agency_name.')'.$names;
-            }
-            return $names;
+        $x=explode(',',$this->imp_agency);
+        $names='';
+
+        foreach($x as $value){
+	        $criteria=new CDbCriteria;
+	        $criteria->condition='agency_id=:postID';
+	        $criteria->params=array(':postID'=>$value);
+	        $auth=  Agency::model()->find($criteria);
+	        $names='('.$auth->agency_name.')'.$names;
         }
+
+        return $names;
+    }
+
     public function getAgendaDate($ctrl){
-    		if ($ctrl) {
-    			$criteria=new CDbCriteria();
-    			$ref=CommMeetingOrdi::model()->find($criteria)->ref_id;
-	    		$ctrl=Referral::model()->findByPK($ref)->ctrl_no;
-	    		return Communication::model()->findByPK($ctrl)->date_agenda;
-	    			
-    		} else {
-    			return 'No Agenda';
-    		}
+		if ($ctrl) {
+			$criteria=new CDbCriteria();
+			$ref=CommMeetingOrdi::model()->find($criteria)->ref_id;
+    		$ctrl=Referral::model()->findByPK($ref)->ctrl_no;
+    		return Communication::model()->findByPK($ctrl)->date_agenda;
+    			
+		} else {
+			return 'No Agenda';
+		}
     		
 
     }
      public function getCommMeetings($d){
-     		if ($d) {
-	     		$temp=CommMeetingOrdi::model()->findByPK($d)->ref_id;
-	            $x=CommMeetingOrdi::model()->find(array('condition'=>'ref_id = '.$temp));
-	            if($x==null){
-	                echo 'No Committee Meeting';
-	            }else{
+ 		if ($d) {
+
+     		$temp=CommMeetingOrdi::model()->findByPK($d)->ref_id;
+            $x=CommMeetingOrdi::model()->find(array('condition'=>'ref_id = '.$temp));
+
+            if($x) {	                
 	            $IAs= CommMeetingOrdi::model()->findAll(array('condition'=>'ref_id = '.$temp,'order'=>'date_meeting desc'));
 	            $iaName = CHtml::listData($IAs,'date_meeting','date_meeting'); 
 	            
-		            foreach($iaName as $val){
-		                echo $val.'<br/>';
-		            }
-	        	}
-        	} else {
-        		return 'No Committee Meeting/s';
+	            foreach($iaName as $val){
+	                echo $val.'<br/>';
+	            }
+
+            } else  {
+	            echo 'No Committee Meeting';
         	}
-        }
-        public function getReferralDate($ctrl){
-        	if ($ctrl) {
-        		$x=CommMeetingOrdi::model()->findByAttributes(array('meeting_ordi_id'=>$ctrl))->ref_id;
-        		return Referral::model()->findByPK($x)->date_referred;
-        	} else {
-        		return 'No Referral Date';
-        	}
-        	
-        }
-        public function getReportDate($ctrl){
-    		if ($ctrl) {
-        		return CommMeetingOrdi::model()->findByAttributes(array('meeting_ordi_id'=>$ctrl))->comm_report;
-			} else {
-				return 'No Report Date';
-			}
-    	
+
+    	} else {
+    		return 'No Committee Meeting/s';
     	}
+    }
+
+    public function getReferralDate($ctrl){
+    	if ($ctrl) {
+    		$x=CommMeetingOrdi::model()->findByAttributes(array('meeting_ordi_id'=>$ctrl))->ref_id;
+    		return Referral::model()->findByPK($x)->date_referred;
+    	} else {
+    		return 'No Referral Date';
+    	}
+    	
+    }
+
+    public function getReportDate($ctrl){
+		if ($ctrl) {
+    		return CommMeetingOrdi::model()->findByAttributes(array('meeting_ordi_id'=>$ctrl))->comm_report;
+		} else {
+			return 'No Report Date';
+		}
+	
+	}
 
 }

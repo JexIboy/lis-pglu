@@ -99,21 +99,15 @@ $form = $this->beginWidget ( 'bootstrap.widgets.TbActiveForm', array (
 </div>
 <script type="text/javascript">    
     $(document).ready(function(){
-        $.get("themes/bootstrap/views/monitorOrd/_viewDetails.php",
-                  "ord_no="+$("[id*=ord_no]").val(),
-                 function(html){
-                     output=html.toString().split("/");
-                     $("[id*=subj_matter]").val(output[0]);
-                     
-                 });
-        $("[id*=ord_no]").change(function(){
-            $.get("themes/bootstrap/views/monitorOrd/_viewDetails.php",
-                  "ord_no="+$(this).val(),
-                 function(html){
-                     output=html.toString().split("/");
-                     $("[id*=subj_matter]").val(output[0]);
-                     
-                 });
+        $("#MonitorOrd_ord_no").change(function(){
+        	$.ajax({
+        		url : 'index.php?r=monitorOrd/getCommDetails',
+        		data : {ord_no : $(this).val()},
+        		dataType : 'json',
+        		success : function (result) {
+        			$("#MonitorOrd_subj_matter").val(result.subj_matter);
+        		}
+        	});
         });
  
       });
