@@ -1,0 +1,135 @@
+
+
+p{
+    color:black;
+	background-image: none; 
+}
+body{
+	margin-top: 0px;
+	background-color:#2578cb;
+	}	
+#login{width:100%;
+margin-top: 2%;
+margin-left: 40%;
+}
+
+#page3{
+	margin-top: 3px;
+}
+
+#discforum{width:100%;
+margin-left: 20%;
+background-color:#003366; 
+border:10px;
+
+}
+#discforumside{float:left;
+}
+#home_banner{
+	background:url("../images/homepagepic.png");
+	background-size:100% 300px;
+	background-repeat:no-repeat;
+}
+#viewtopic{
+border: 10px;
+
+margin-left:8%;
+width:105%;
+}
+
+#viewphotos{
+margin-left:25%; 
+width:80%;
+}
+#adminPanel{
+
+}
+#leftCol{
+	
+	
+	background-color:white;
+}
+#leftpanel{
+width:150%;}
+#requiredation{
+        color:blue;
+}
+#gallery{
+	background-color:#003366;
+	width:100%;
+}
+
+#eventsup
+{
+height:230px;
+overflow:scroll;
+}
+
+#sliderframer{background-color:white;
+padding:20px;}
+#slider{margin-left:60%}
+#page
+{
+	width:100%;
+	margin-bottom: 1px;
+
+}
+
+.container{
+
+}
+#createtopic{
+	margin-left:15%;
+	background-color:#003366;
+	width:50%;
+	margin-left: 35%;
+}
+#mainforum{
+	margin-left: 12%;
+	width:100%;}
+
+#content1
+{
+margin-left:30%;
+margin-top:1%;
+}
+.nav{
+    height: auto;
+    width: auto;
+	left:0px;
+	top:0px;}
+
+#page3{
+	margin-top: 3px;
+}
+.btn-group{position:center;}
+#content{
+		width: 95%;
+        margin-top:0%;
+		margin-left: 0%;
+}
+#sidebar
+{
+	margin-top: -22%;	
+	margin-left: 3%;
+	width: 100%;
+	padding: 0px 0px 0px 0%;       
+}
+#logo
+{
+}
+#header
+{	
+}
+#footer
+{
+       	margin-top:11%;
+        padding: auto;
+		text-align:left;
+        font-size:15px;
+		color:white;
+}
+
+
+
+
