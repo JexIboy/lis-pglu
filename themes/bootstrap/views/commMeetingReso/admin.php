@@ -31,7 +31,8 @@ $('.search-form form').submit(function(){
 <?php echo CHtml::link('Advanced Search','#',array('class'=>'btn search-button btn-success','style'=>'color:white;')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
-	'model'=>$model,
+	'model' => $model,
+	'is_archive' => 0,
 )); ?>
 </div><!-- search-form -->
 
@@ -61,18 +62,14 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 	'columns'=>array(
 		array('header'=>'No.','value'=>'$row+1'),
 		//'meeting_reso_id',
-
 		array('header'=>'Control No.','filter'=>'','type'=>'raw','value'=>'CHtml::link($data->ref->ctrl_no,array("commMeetingReso/download","id"=>$data->meeting_reso_id))'),
 		array('name'=>'subject_matter','value'=>'$data->ref->ctrlNo->subject_matter','htmlOptions'=>array('style'=>'width:40%;')),
-		array('name'=>'action_taken','value'=>'$data->ActionTaken'),
 		'date_meeting',
-		'comm_report',
+		//'comm_report',
 		//array('name'=>'input_by','value'=>'$data->inputBy->Fullname'),
-		/*
-		'comm_rep_file',
-		'comm_meeting_stat',
-		*/
-
+		//'comm_rep_file',
+		//'comm_meeting_stat',
+		array('header'=>'Action Taken','value'=>'$data->ActionTaken'),
 		array('header'=>'Action','htmlOptions'=>array('style'=>'width:70px; text-align:center;'),'visible'=>$role == 'SCR-RF' || $role=='SYSAD'? true:false,
 			'class' => 'bootstrap.widgets.TbButtonColumn','template'=>$role=='SYSAD'? '{view}{update}{delete}':'{view}{update}',  
 			'buttons'=>array(

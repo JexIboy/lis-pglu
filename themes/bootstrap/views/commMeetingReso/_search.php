@@ -29,11 +29,13 @@ $box = $this->beginWidget ( 'bootstrap.widgets.TbBox', array (
                 ));
     CHtml::$afterRequiredLabel = '';
     ?>
-    <?php echo $form->dropDownListRow($model,'meeting_reso_id',CHtml::listData(CommMeetingReso::model()->findAll(),'meeting_reso_id','meeting_reso_id'), array('class'=>'span3', 'value'=>'',));?>
+    <?php //echo $form->dropDownListRow($model,'meeting_reso_id',CHtml::listData(CommMeetingReso::model()->findAll(),'meeting_reso_id','meeting_reso_id'), array('class'=>'span3', 'value'=>'',));?>
 
-	<?php echo $form->dropDownListRow($model,'ref_id',CHtml::listData(Referral::model()->findAll(array('condition'=>'referral_stat=0')),'ref_id','ctrl_no'),array('class'=>'span3'));?>
+    <?php echo $form->textFieldRow($model,'subject_matter'); ?>
 
-	<?php echo $form->dropDownListRow($model,'action_taken',array(0=>'Pending',1=>'Approved',2=>'Return to Origin'),array('class'=>'span3'));?>
+	<?php echo $form->dropDownListRow($model,'ref_id',CHtml::listData(CommMeetingReso::getCommResoWithReferral($is_archive),'ref_id','ref_id'),array('class'=>'span3', 'empty'=>''));?>
+
+	<?php echo $form->dropDownListRow($model,'action_taken',array(0=>'Pending',1=>'Approved',2=>'Return to Origin'),array('class'=>'span3', 'empty'=>''));?>
 
 	<?php echo $form->datepickerRow($model, 'date_meeting',array('prepend'=>'<i class="icon-calendar"></i>','options'=>array('format'=>'yyyy-mm-dd'))); ?>
 	

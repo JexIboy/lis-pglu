@@ -30,11 +30,10 @@ $('.search-form form').submit(function(){
 <?php echo CHtml::link('Advanced Search','#',array('class'=>'btn search-button btn-success','style'=>'color:white;')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
-	'model'=>$model,
+	'model' => $model,
+	'is_archive' => 1
 )); ?>
 </div><!-- search-form -->
-
-
 
 <?php
 
@@ -60,7 +59,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 		array('header'=>'No.','value'=>'$row+1'),
 		//'meeting_reso_id',
 		array('name'=>'ref_id','value'=>'$data->ControlNumber'),
-		array('name'=>'action_taken','value'=>'$data->ActionTaken'),
+		array('name'=>'subject_matter','value'=>'$data->ref->ctrlNo->subject_matter','htmlOptions'=>array('style'=>'width:40%;')),
 		'date_meeting',
 		'comm_report',
 		array('name'=>'input_by','value'=>'$data->inputBy->Fullname'),
@@ -68,6 +67,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 		'comm_rep_file',
 		'comm_meeting_stat',
 		*/
+		array('name'=>'action_taken','value'=>'$data->ActionTaken'),
 		array(	'header'=>'Action','class'=>'CButtonColumn','template'=>'{viewArchive} {view}',
     		'buttons'=>array(
     				'view'=>array(

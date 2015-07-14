@@ -104,18 +104,22 @@ class CommMeetingReso extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 		$criteria=new CDbCriteria();
-		$criteria->with=array('subject_matter','ref');
-		//$criteria->addSearchCondition('subject_matter',$this->ref_id->ctrl_no->subject_matter, true);
-		$criteria->compare('subject_matter',$this->subject_matter,true);
-		$criteria->compare('meeting_reso_id',$this->meeting_reso_id);
-		$criteria->compare('ref_id',$this->ref_id);
-		$criteria->compare('action_taken',$this->action_taken);
-		$criteria->compare('date_meeting',$this->date_meeting,true);
-		$criteria->compare('comm_report',$this->comm_report,true);
-		$criteria->compare('input_by',$this->input_by);
-		$criteria->compare('comm_rep_file',$this->comm_rep_file,true);
-		$criteria->compare('archive',$this->comm_rep_file,true);
-		$criteria->compare('comm_meeting_stat',$this->comm_meeting_stat);
+		
+		$criteria->join = 'JOIN tbl_referral r ON t.ref_id = r.ref_id
+						   JOIN tbl_communication c ON r.ctrl_no = c.ctrl_no';
+		$criteria->condition = 'c.subject_matter LIKE "%' . $this->subject_matter . '%" 
+								AND t.archive = 0';
+		$criteria->compare('t.meeting_reso_id',$this->meeting_reso_id);
+		$criteria->compare('t.ref_id',$this->ref_id);
+		$criteria->compare('t.action_taken',$this->action_taken);
+		$criteria->compare('t.date_meeting',$this->date_meeting,true);
+		$criteria->compare('t.comm_report',$this->comm_report,true);
+		$criteria->compare('t.input_by',$this->input_by);
+		$criteria->compare('t.comm_rep_file',$this->comm_rep_file,true);
+		$criteria->compare('t.archive',$this->comm_rep_file,true);
+		$criteria->compare('t.comm_meeting_stat',$this->comm_meeting_stat);
+
+
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination' => array(
@@ -158,22 +162,22 @@ class CommMeetingReso extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-	public function CommReso(){
-		$cat = Category::model()->findByAttributes(array('cat_name'=>'Provincial Ordinance'))->cat_id;
-		$result = CHtml::listData(Communication::model()->findAll(array('condition'=>'cat_id <> '.$cat.' and comm_stat=1')),'ctrl_no','ctrl_no');
 
+	public function getCommResoWithReferral($is_archive){
 		$criteria = new CDbCriteria();
-		$criteria->condition = "referral_stat=0";
-		$criteria->addInCondition("ctrl_no", $result);
 
-		$criteria2 = new CDbCriteria();
-		$criteria2->addInCondition("ctrl_no", $result);
+		$criteria->join = 'JOIN tbl_comm_meeting_reso cmr ON cmr.ref_id = t.ref_id';
+		$criteria->condition = 't.referral_stat = 1 AND cmr.archive = ' . $is_archive;
 
-		return $this->isNewRecord ? CHtml::listData(Referral::model()->findAll($criteria),'ref_id','ctrl_no') : CHtml::listData(Referral::model()->findAll($criteria2),'ref_id','ctrl_no');
+		$commMeeting = Referral::model()->findAll($criteria);
+
+		return $commMeeting;
 	}
+
 	public function getControlNumber(){
 		return $this->ref->ctrlNo->ctrl_no;
 	}
+
 	public function getCommDetails(){
 
 		return Communication::model()->findByPK($this->ref->ctrlNo->ctrl_no);
@@ -189,7 +193,8 @@ class CommMeetingReso extends CActiveRecord
 				return 'Return to Origin';break;
 		}
 	}
-public function getSubjectMatter(){
+
+	public function getSubjectMatter(){
 		return Communication::model()->findByPK($this->ref->ctrlNo)->subject_matter;
 	}
 	
