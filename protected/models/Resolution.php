@@ -93,13 +93,13 @@ class Resolution extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.		
 		$criteria=new CDbCriteria;
-		$criteria->condition='archive=0';
+		
+		$criteria->condition='archive = 0 AND author LIKE "' . $this->author . '%"';
 		$criteria->compare('res_no',$this->res_no,true);	
 		$criteria->order = "date_passed ASC";
 		$criteria->compare('date_passed',$this->date_passed,true);
 		$criteria->compare('ctrl_no',$this->ctrl_no,true);
 		$criteria->compare('subj_matter',$this->subj_matter,true);
-		$criteria->compare('author',$this->author,true);
 		$criteria->compare('reso_file',$this->reso_file,true);
 		$criteria->compare('input_by',$this->input_by);
 		$criteria->compare('archive',$this->archive,true);
@@ -114,11 +114,10 @@ class Resolution extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.		
 		$criteria=new CDbCriteria;
-		$criteria->condition='archive=1';
+		$criteria->condition='archive = 1 AND author LIKE "' . $this->author . '%"';
 		$criteria->compare('res_no',$this->res_no,true);
 		$criteria->compare('ctrl_no',$this->ctrl_no,true);
 		$criteria->compare('subj_matter',$this->subj_matter,true);
-		$criteria->compare('author',$this->author,true);
 		$criteria->compare('reso_file',$this->reso_file,true);
 		$criteria->compare('input_by',$this->input_by);
 		$criteria->compare('date_passed',$this->date_passed,true);
@@ -131,15 +130,16 @@ class Resolution extends CActiveRecord
             ),
 		));
 	}
+	
 	public function searchIndex()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 		$criteria=new CDbCriteria;
-		$criteria->condition='archive=0';
+
+		$criteria->condition='archive = 0 AND author LIKE "' . $this->author . '%"';
 		$criteria->order="date_passed ASC";
 		$criteria->compare('ctrl_no',$this->ctrl_no,true);
 		$criteria->compare('subj_matter',$this->subj_matter,true);
-		$criteria->compare('author',$this->author,true);
 		$criteria->compare('reso_file',$this->reso_file,true);
 		$criteria->compare('input_by',$this->input_by);
 		$criteria->compare('date_passed',$this->date_passed,true);
@@ -177,31 +177,41 @@ class Resolution extends CActiveRecord
 	}
 
 	public function getAuthor(){
-            $x=explode(',',$this->author);
-            $names='';
-            foreach($x as $value){
-            $criteria=new CDbCriteria;
-            $criteria->condition='off_id=:postID';
-            $criteria->params=array(':postID'=>$value);
-            $auth=  Officials::model()->find($criteria);
-            echo $auth->Fullname.'<br/>';
-                
-            }
-        }
+
+	    $x=explode(',',$this->author);
+	    $names='';
+	    
+	    foreach($x as $value){
+
+	        $criteria = new CDbCriteria;
+	        $criteria->condition = 'off_id=:postID';
+	        $criteria->params = array(':postID'=>$value);
+
+	        $auth = Officials::model()->find($criteria);
+
+	        echo $auth->Fullname.'<br/>';
+	        
+	    }
+	}
 
     public function getAuthorView(){
-            $x=explode(',',$this->author);
-            $names='';
-            foreach($x as $value){
-            $criteria=new CDbCriteria;
-            $criteria->condition='off_id=:postID';
-            $criteria->params=array(':postID'=>$value);
-            $auth=  Officials::model()->find($criteria);
-            $names='('.$auth->Fullname.')'.$names;
-            }
-            return $names;
-        }
-    
+
+	    $x=explode(',',$this->author);
+	    $names='';
+
+	    foreach($x as $value){
+		    $criteria = new CDbCriteria;
+		    $criteria->condition = 'off_id=:postID';
+		    $criteria->params = array(':postID'=>$value);
+
+		    $auth = Officials::model()->find($criteria);
+		    $names ='('.$auth->Fullname.')'.$names;
+
+	    }
+
+	    return $names;
+	}
+
     public function getReferralDate($ctrl){
     	$x=Referral::model()->findByAttributes(array('ctrl_no'=>$ctrl));
 	 if (!empty($x)) {

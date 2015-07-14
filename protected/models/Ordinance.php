@@ -100,12 +100,12 @@ class Ordinance extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		$criteria->condition='archive=0';
+
+		$criteria->condition='archive = 0 AND author LIKE "' . $this->author . '%"';
 		$criteria->order = "date_passed ASC";
 		$criteria->compare('ord_no',$this->ord_no,true);
 		$criteria->compare('amend',$this->amend,true);
 		$criteria->compare('meeting_ordi_id',$this->meeting_ordi_id);
-		$criteria->compare('author',$this->author,true);
 		$criteria->compare('imp_agency',$this->imp_agency,true);
 		$criteria->compare('subj_matter',$this->subj_matter,true);
 		$criteria->compare('ordi_file',$this->ordi_file,true);
@@ -129,10 +129,10 @@ class Ordinance extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		$criteria->condition='archive=1';
+
+		$criteria->condition='archive = 1 AND author LIKE "' . $this->author . '%"';
 		$criteria->compare('ord_no',$this->ord_no,true);
 		$criteria->compare('meeting_ordi_id',$this->meeting_ordi_id);
-		$criteria->compare('author',$this->author,true);
 		$criteria->compare('imp_agency',$this->imp_agency,true);
 		$criteria->compare('subj_matter',$this->subj_matter,true);
 		$criteria->compare('ordi_file',$this->ordi_file,true);
