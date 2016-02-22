@@ -17,7 +17,7 @@
 			{
 				title: 'Home',
 				link: '/',
-				submenu: []
+				submenus: []
 			},
 			{
 				title: 'Communications',
@@ -64,12 +64,12 @@
 			{
 				title: 'Monitor Ordinances',
 				link: '/ordinances/monitor',
-				submenu: [],
+				submenus: [],
 			},
 			{
 				title: 'Reports',
 				link: '',
-				submenu: [
+				submenus: [
 					{
 						title: 'Ordinance Reports',
 						link: '/ordinances/reports',
@@ -78,6 +78,11 @@
 					{
 						title: 'Resolution Reports',
 						link: '/resolutions/reports',
+						submenus: []
+					},
+					{
+						title: 'Other Reports',
+						link: '/others/reports',
 						submenus: []
 					}
 				],
