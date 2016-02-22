@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="PhpMyAdmin" ng-controller="AppController as vm">
+	<head>
+		<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+		<link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="/angular-app/assets/css/main.css">
+	</head>
+	<body>
+		<div layout="row" layout-wrap layout-fill>
+			<md-sidenav layout-fill class="md-sidenav-left md-whiteframe-z2" md-component-id="appMenu" md-is-locked-open="$mdMedia('gt-md')">
+				<md-toolbar class="md-theme-indigo" layout-align="top center">
+					<h1 class="md-toolbar-tools">LIS PGLU</h1>
+				</md-toolbar>
+				<md-content layout-align="top center">
+					<md-list ng-cloak class="app-menus">
+						<md-list-item ng-click="vm.goTo(menu); vm.selected_menu = menu.title" ng-repeat="menu in vm.menus" class="menu" ng-class="{selected: vm.selected_menu == menu.title}">							
+							<p>{{menu.title}}</p>
+							<md-menu class="md-secondary" ng-if="menu.submenus.length">
+								<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+									<md-icon md-menu-origin>keyboard_arrow_down</md-icon>
+								</md-button>
+								<md-menu-content width="4">
+									<md-menu-item ng-repeat="submenu in menu.submenus">
+										<md-button ng-click="vm.goTo(submenu)">
+											{{submenu.title}}
+										</md-button>
+									</md-menu-item>
+								</md-menu-content>
+							</md-menu>
+						</md-list-item>
+						<md-divider></md-divider>
+						<md-list-item ng-click="vm.goTo($event)">
+							<p>Logout</p>
+						</md-list-item>		      
+					</md-list>
+				</md-content>
+			</md-sidenav>
+			<md-content flex autoscroll>
+				<md-toolbar>
+					<div class="md-toolbar-tools">
+						<md-button class="md-icon-button" aria-label="Settings" hide-gt-md="" ng-click="vm.toggleMenu('appMenu')">
+							<md-icon>list</md-icon>
+						</md-button>
+						<h2>
+							<span>{{vm.page_title}} Page</span>
+						</h2>
+					</div>
+				</md-toolbar>
+				<md-tabs md-dynamic-height md-border-bottom md-selected="vm.selected_tab">
+					<md-tab label="Databases"></md-tab>
+					<md-tab label="Sql"></md-tab>
+					<md-tab label="Status"></md-tab>
+					<md-tab label="User Accounts"></md-tab>
+					<md-tab label="Export"></md-tab>
+					<md-tab label="Import"></md-tab>
+					<md-tab label="Settings"></md-tab>
+					<md-tab label="Replication"></md-tab>
+					<md-tab label="Variables"></md-tab>
+					<md-tab label="Charsets"></md-tab>
+					<md-tab label="Engines"></md-tab>
+				</md-tabs>
+				<div ng-view></div>
+			</md-content>
+		</div>
+
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
+		
+		<script type="text/javascript" src="/angular-app/app.module.js"></script>
+		<script type="text/javascript" src="/angular-app/app.controller.js"></script>
+		<script type="text/javascript" src="/angular-app/app.routes.js"></script>
+		
+	</body>
+</html>

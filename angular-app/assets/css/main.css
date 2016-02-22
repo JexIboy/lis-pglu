@@ -1,0 +1,5 @@
+.app-menus .menu.selected {
+	-webkit-box-shadow: inset 5px 0px 0px 0px rgb(63, 81, 181);
+	-moz-box-shadow: inset 5px 0px 0px 0px rgb(63, 81, 181);
+	box-shadow: inset 5px 0px 0px 0px rgb(63, 81, 181);
+}
