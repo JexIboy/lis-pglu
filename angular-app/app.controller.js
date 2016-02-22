@@ -13,6 +13,7 @@
 		vm.goTo = goTo;
 		vm.toggleMenu = toggleMenu;
 		vm.openMenu = openMenu;
+		vm.selected_menu = 'Home';		
 		vm.menus = [
 			{
 				title: 'Home',
@@ -100,7 +101,6 @@
 		}
 
 		function goTo(menu) {
-			vm.page_title = menu.title;
 			vm.toggleMenu();
 			$location.path(menu.link);
 		}
