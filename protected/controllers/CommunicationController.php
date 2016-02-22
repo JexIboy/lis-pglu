@@ -1,5 +1,8 @@
 <?php
-
+class LinkPager extends CLinkPager
+{
+        public $cssFile = '..framework/web/widgets/pager.css';
+}
 class CommunicationController extends Controller
 {
 	/**
@@ -46,7 +49,7 @@ class CommunicationController extends Controller
 	}
 
 	public function actionDownload($id){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Downloaded Communication Letter';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -79,7 +82,7 @@ class CommunicationController extends Controller
 	 */
 	public function actionView($id)
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='View Communication ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -95,7 +98,7 @@ class CommunicationController extends Controller
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionUrgentComm($id){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Assigned '.$id.' To An Urgent Communication';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -106,7 +109,7 @@ class CommunicationController extends Controller
 						$comm->comm_stat=1;
 						$comm->type_comm=0;
 						$comm->save();
-						
+					
 						$stat=new Status();
 						$stat->ctrl_no=$comm->ctrl_no;
 						$stat->comm_stat=1;
@@ -118,7 +121,7 @@ class CommunicationController extends Controller
 				$this->redirect(array('viewTypeComm'));
 	}
 	public function actionXUrgentComm($id){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Assigned '.$id.' for Referral';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -136,7 +139,7 @@ class CommunicationController extends Controller
 				$this->redirect(array('viewTypeComm'));
 	}
 	public function actionViewTypeComm(){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed List of Communication';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -211,7 +214,7 @@ class CommunicationController extends Controller
                              $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.substr($model->ctrl_no,0,4).'/'.$model->ctrl_no.'/'.$picture_file->getName());
                             }
                 }
-                
+                date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Added Another Communication';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -255,17 +258,18 @@ class CommunicationController extends Controller
                 
                 if($picture_file){ 
                 $picture_name = $picture_file->name;
-                if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.date('Y'))){
-                	mkdir(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.date('Y'));
+                if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.substr($model->ctrl_no,0,4).'/'.$model->comm_letter)){
+                	mkdir(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.substr($model->ctrl_no,0,4).'/'.$model->comm_letter);
                 }
 
-                          if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.date('Y').'/'.$model->comm_letter)){
-                             mkdir(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.date('Y').'/'.$model->comm_letter);
-                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.date('Y').'/'.$model->comm_letter.'/'.$picture_file->getName());
-
+                          if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.substr($model->ctrl_no,0,4).'/'.$model->ctrl_no)){
+                             mkdir(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.substr($model->ctrl_no,0,4).'/'.$model->comm_letter);
+                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.substr($model->ctrl_no,0,4).'/'.$model->ctrl_no.'/'.$picture_file->getName());
                             }
                             else{
-                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.date('Y').'/'.$model->comm_letter.'/'.$picture_file->getName());
+                              
+                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/communication/'.substr($model->ctrl_no,0,4).'/'.$model->ctrl_no.'/'.$picture_file->getName());
+                            //fwrite('/protected/document/communication/'.substr($model->ctrl_no,0,4).'/'.$model->ctrl_no,$model->comm_letter);
                             }
                 }
 
@@ -273,33 +277,59 @@ class CommunicationController extends Controller
                 $model->input_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 
                 
-			if($model->type_comm==1){
-						$model->comm_stat=0;}
-						else{$model->comm_stat=1;}
+			if($model->type_comm==1) {
+					$model->comm_stat=0;}
+
+					else{$model->comm_stat=1;}
                 
 			if($model->save()){
-				
-		$activity=new Activity();
-		$activity->act_desc='Updated Communication ID: '.$id;
-		$activity->act_datetime=date('Y-m-d G:i:s');
-		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-		$activity->save();
+				date_default_timezone_set("Asia/Manila");
+				$activity=new Activity();
+				$activity->act_desc='Updated Communication ID: '.$id;
+				$activity->act_datetime=date('Y-m-d G:i:s');
+				$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+				$activity->save();
+			
 				if($model->type_comm==1){
+						$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ctrl_no));
+    						if(!empty($stat)){
+    							$stat->ctrl_no=$model->ctrl_no;
+								$stat->comm_stat=0;
+								$stat->referral_stat=0;
+								$stat->comm_meeting_stat=0;
+								$stat->save();
+								$activity->save();
+										}
+							else{				
+								$stat=new Status();
+								$stat->ctrl_no=$model->ctrl_no;
+								$stat->comm_stat=0;
+								$stat->referral_stat=0;
+								$stat->comm_meeting_stat=0;
+								$stat->save();
+								$activity->save();
+								}}
 
+									
+				else{	
 						$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ctrl_no));
-    					$stat->ctrl_no=$model->ctrl_no;
-						$stat->comm_stat=0;
-						$stat->referral_stat=0;
-						$stat->comm_meeting_stat=0;
-						$activity->save();
-				}else{
-						
-						$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ctrl_no));
-						$stat->comm_stat=1;
-						$stat->referral_stat=1;
-						$stat->comm_meeting_stat=1;
-						$activity->save();
-				}
+    						if(!empty($stat)){
+    							$stat->ctrl_no=$model->ctrl_no;
+								$stat->comm_stat=1;
+								$stat->referral_stat=1;
+								$stat->comm_meeting_stat=1;
+								$stat->save();
+								$activity->save();
+										}
+							else{				
+								$stat=new Status();
+								$stat->ctrl_no=$model->ctrl_no;
+								$stat->comm_stat=1;
+								$stat->referral_stat=1;
+								$stat->comm_meeting_stat=1;
+								$stat->save();
+								$activity->save();
+								}}
 				$this->redirect(array('view','id'=>$model->ctrl_no));
 		}
 	}
@@ -319,7 +349,7 @@ class CommunicationController extends Controller
 		$x=Communication::model()->findByPK($id);
 		$x->archive=1;
 		$x->save();
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Archived Communication ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -335,7 +365,7 @@ class CommunicationController extends Controller
 		$x=Communication::model()->findByPK($id);
 		$x->archive=0;
 		$x->save();
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Retrieved Communication ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -363,7 +393,7 @@ class CommunicationController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Communication List';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -380,7 +410,7 @@ class CommunicationController extends Controller
 	}
 	public function actionViewArchive()
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Archived Communication List';
 		$activity->act_datetime=date('Y-m-d G:i:s');

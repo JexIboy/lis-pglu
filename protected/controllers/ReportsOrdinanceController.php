@@ -45,7 +45,7 @@ class ReportsOrdinanceController extends Controller
 	 */
 	
 	public function actionAuthoredMonthlyOrdinance(){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Monthly Ordinance per Board Member';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -63,7 +63,7 @@ class ReportsOrdinanceController extends Controller
                         $my=$year.'-'.$month;
 			$auth_name = $_POST['auth_name'];
                         
-                        
+                        date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Searched Monthly Ordinance of '.Officials::model()->findByPK($auth_name)->emp->Fullname;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -108,7 +108,7 @@ class ReportsOrdinanceController extends Controller
                                                                            'params' => array(':author' =>'%'.$data[1].',%' , ':year'=>$data[0].'%'),));
                                      $author=  Officials::model()->findByPK($data[1]);
 
-        
+        date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Printed Yearly Ordinance of '.$author->emp->Fullname;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -119,7 +119,7 @@ class ReportsOrdinanceController extends Controller
 	}
 	
 	public function actionAuthoredYearlyOrdinance(){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Searched Authored Yearly Ordinance';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -148,7 +148,7 @@ foreach($x as $values =>$value) {
 				} 
 			$auth_name = $_POST['auth_name'];
                         
-             
+             date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Searched Yearly Ordinance of '.Officials::model()->findByPK($auth_name)->emp->Fullname.' for the year '.$year;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -177,7 +177,7 @@ foreach($x as $values =>$value) {
 	}
 	public function actionHistoryOrdinance(){
 	
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Searched Ordinance History';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -197,7 +197,7 @@ foreach($x as $values =>$value) {
 
 	public function actionprintOrdinanceHistory($model){
         $x=Ordinance::model()->findByAttributes(array('ord_no'=>$model));
-        
+        date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Printed Ordinance History Ordinance No. '.$x->ord_no;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -206,7 +206,7 @@ foreach($x as $values =>$value) {
         $this->renderPartial('PrintOrdinanceHistory',array('model'=>$x));
     }
 	public function actionYearlyOrdinance(){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Searched Yearly Ordinance';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -237,7 +237,7 @@ foreach($x as $values =>$value) {
 			 $end_year=$fy[1];
 			 $start_year=$fy[0]; 
 
-			 
+			 date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Searched Fiscal Yearly '.$start_year.' - '.$end_year.' Ordinance Report';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -268,7 +268,7 @@ foreach($x as $values =>$value) {
                 									 'order' => 'date_passed ASC',
                 									 'params' => array(':start_date' => $start_year,':end_date' => $end_year, ),));
                               
-        
+        date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Printed Fiscal Yearly '.$start_year.' - '.$end_year.' Ordinance Report';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -320,7 +320,7 @@ foreach($x as $values =>$value) {
 		));
 	}
 	public function actionIndex(){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Statistical Report of Ordinance';
 		$activity->act_datetime=date('Y-m-d G:i:s');

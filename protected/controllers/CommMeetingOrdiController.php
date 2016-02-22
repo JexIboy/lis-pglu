@@ -27,49 +27,50 @@ class CommMeetingOrdiController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow', 
-				'actions'=>array('download','retrieve','index','view','create','update','admin','CommMeetingList','getCommDetails'),
-				'roles'=>array('SCR-RF', 'SYSAD'),
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('download','retrieve','index','view','create','update','admin','CommMeetingList','viewArchive'),
+				'roles'=>array('SCR-RF'),
 			),
-			array('allow', 
-				'actions'=>array('delete','viewArchive'),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('download','delete','viewArchive','retrieve'),
 				'roles'=>array('SYSAD'),
 			),
 
-			array('allow', 
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('admin','index','download'),
-				'roles'=>array('SCR-T','SCR-RC','BOKAL','VG','SCR-BOK', 'SYSAD'),
+				'roles'=>array('SCR-T','SCR-RC','BOKAL','VG','SCR-BOK'),
 			),
-			array('deny',
+			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
 	}
 	public function actionDownload($id){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Downloaded Committe Report File';
 		$activity->act_datetime=date('Y-m-d G:i:s');
 		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 		$activity->save();
 
-        $model = CommMeetingOrdi::model()->findByPK($id);
-        $year=substr($model->ref->ctrl_no, 0,4);
-        $file= $model->comm_rep_file;
-
+            $model = CommMeetingOrdi::model()->findByPK($id);
+            $year=substr($model->ref->ctrl_no, 0,4);
+            $file= $model->comm_rep_file;
         if (file_exists(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingOrdi/'.$year.'/'.$model->ref->ctrl_no.'/'.$file)) {
-		    header('Content-Description: File Transfer');
-		    header('Content-Type: application/octet-stream');
-		    header('Content-Disposition: attachment; filename='.basename(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingOrdi/'.$year.'/'.$model->ref->ctrl_no.'/'.$file));
-		    header('Content-Transfer-Encoding: binary');
-		    header('Expires: 0');
-		    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		    header('Pragma: public');
-		    header('Content-Length: ' . filesize(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingOrdi/'.$year.'/'.$model->ref->ctrl_no.'/'.$file));
-		    ob_clean();
-		    flush();
-		    readfile(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingOrdi/'.$year.'/'.$model->ref->ctrl_no.'/'.$file);
-		    exit;
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename='.basename(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingOrdi/'.$year.'/'.$model->ref->ctrl_no.'/'.$file));
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingOrdi/'.$year.'/'.$model->ref->ctrl_no.'/'.$file));
+    ob_clean();
+    flush();
+    readfile(Yii::getPathOfAlias('webroot').'/protected/document/CommMeetingOrdi/'.$year.'/'.$model->ref->ctrl_no.'/'.$file);
+    exit;
+		}else{
+			
 		}	
 	}
 	/**
@@ -77,7 +78,7 @@ class CommMeetingOrdiController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionCommMeetingList(){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed List of Referrals for Committe Meeting';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -102,7 +103,7 @@ class CommMeetingOrdiController extends Controller
 	}
 	public function actionView($id)
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='View Committee Meeting ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -111,7 +112,8 @@ class CommMeetingOrdiController extends Controller
 
 		$model=$this->loadModel($id);
 		
-		if(isset($_POST['CommMeetingOrdi'])) {
+		if(isset($_POST['CommMeetingOrdi']))
+		{
 			$model->attributes=$_POST['CommMeetingOrdi'];
 
 			$picture_name='';
@@ -120,26 +122,29 @@ class CommMeetingOrdiController extends Controller
                 
 			if($picture_file){
                 $picture_name = $picture_file->name;
-				if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y'))){
-					mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y'));
-					mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y').'/'.$model->ref->ctrl_no);
-					$picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
+                         if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y'))){
+                          	 mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y'));
+                             mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y').'/'.$model->ref->ctrl_no);
+                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
 
-				}
-				else{
-					mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y').'/'.$model->ref->ctrl_no);
-					$picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
-				}
-            }
+                            }
+                            else{
+                            	mkdir(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y').'/'.$model->ref->ctrl_no);
+                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/commMeetingOrdi/'.date('Y').'/'.$model->ref->ctrl_no.'/'.$picture_file->getName());
+                            }
+                }
              	
-			CommMeetingOrdi::model()->updateByPK($id,array('comm_report'=>$model->comm_report,'comm_rep_file'=>$model->comm_rep_file,'comm_meeting_stat'=>1));
-			$activity=new Activity();
-			$activity->act_desc='Assigned Date of Committee Report of Committe Meeting ID: '.$id;
-			$activity->act_datetime=date('Y-m-d G:i:s');
-			$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-			$activity->save();
+				CommMeetingOrdi::model()->updateByPK($id,array('comm_report'=>$model->comm_report,'comm_rep_file'=>$model->comm_rep_file,'comm_meeting_stat'=>1));
+				date_default_timezone_set("Asia/Manila");
+		$activity=new Activity();
+		$activity->act_desc='Assigned Date of Committee Report of Committe Meeting ID: '.$id;
+		$activity->act_datetime=date('Y-m-d G:i:s');
+		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+		$activity->save();
+                
+							
 
-			if($model->action_taken!=0){
+		if($model->action_taken!=0){
 				$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ref->ctrl_no));
 				$stat->comm_meeting_stat=1;
 				$stat->referral_stat=1;
@@ -187,14 +192,14 @@ class CommMeetingOrdiController extends Controller
 				if($model->action_taken!=0){
 					Referral::model()->updateByPK($model->ref_id,array('referral_stat'=>1));
 				}
-			
-				$activity=new Activity();
-				$activity->act_desc='Added Another Committee Meeting';
-				$activity->act_datetime=date('Y-m-d G:i:s');
-				$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-				$activity->save();
+				date_default_timezone_set("Asia/Manila");
+		$activity=new Activity();
+		$activity->act_desc='Added Another Committee Meeting';
+		$activity->act_datetime=date('Y-m-d G:i:s');
+		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+		$activity->save();
 				$this->redirect(array('view','id'=>$model->meeting_ordi_id));
-			}
+				}
 		}
 
 		$this->render('create',array(
@@ -225,26 +230,26 @@ class CommMeetingOrdiController extends Controller
 
 			if($model->save())
 				
-				if ($model->action_taken != 0) {
-					$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ref->ctrl_no));
-					
-					$stat->referral_stat=1;
-					$stat->save();
+				if($model->action_taken!=0){
+				$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ref->ctrl_no));
+				
+				$stat->referral_stat=1;
+				$stat->save();
 
-					Referral::model()->updateByPK($model->ref_id,array('referral_stat'=>1));
-				} else {
-					$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ref->ctrl_no));
-					$stat->comm_meeting_stat=0;
-					$stat->referral_stat=1;
-					$stat->save();
-					Referral::model()->updateByPK($model->ref_id,array('referral_stat'=>1));
+				Referral::model()->updateByPK($model->ref_id,array('referral_stat'=>1));
+				}else{
+				$stat=Status::model()->findByAttributes(array('ctrl_no'=>$model->ref->ctrl_no));
+				$stat->comm_meeting_stat=0;
+				$stat->referral_stat=1;
+				$stat->save();
+				Referral::model()->updateByPK($model->ref_id,array('referral_stat'=>1));
 				}
-
-				$activity=new Activity();
-				$activity->act_desc='Updated Committee Meeting ID: '.$id;
-				$activity->act_datetime=date('Y-m-d G:i:s');
-				$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-				$activity->save();
+				date_default_timezone_set("Asia/Manila");
+		$activity=new Activity();
+		$activity->act_desc='Updated Committee Meeting ID: '.$id;
+		$activity->act_datetime=date('Y-m-d G:i:s');
+		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+		$activity->save();
 				$this->redirect(array('view','id'=>$model->meeting_ordi_id));
 		}
 
@@ -260,7 +265,7 @@ class CommMeetingOrdiController extends Controller
 	 */
 	public function actionViewArchive()
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Archived Committee Meetings';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -268,7 +273,6 @@ class CommMeetingOrdiController extends Controller
 		$activity->save();
 		$model=new CommMeetingOrdi('viewArchive');
 		$model->unsetAttributes();  // clear any default values
-
 		if(isset($_GET['CommMeetingOrdi']))
 			$model->attributes=$_GET['CommMeetingOrdi'];
 
@@ -280,6 +284,7 @@ class CommMeetingOrdiController extends Controller
 	public function actionRetrieve($id)
 	{
 		CommMeetingOrdi::model()->updateByPK($id,array('archive'=>0));
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Retrieved Committee Meeting ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -293,6 +298,7 @@ class CommMeetingOrdiController extends Controller
 	{
 		//$this->loadModel($id)->delete();
 		CommMeetingOrdi::model()->updateByPK($id,array('archive'=>1));
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Archived Committe Meeting ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -308,7 +314,11 @@ class CommMeetingOrdiController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$this->redirect(array('admin'));
+		/*$dataProvider=new CActiveDataProvider('CommMeetingOrdi');
+		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
+		));*/
+$this->redirect(array('admin'));
 	}
 
 	/**
@@ -316,6 +326,7 @@ class CommMeetingOrdiController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Committee Meeting List';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -333,9 +344,6 @@ class CommMeetingOrdiController extends Controller
 		));
 	}
 
-	public function actionGetCommDetails($ref_id) {
-		echo CJSON::encode(Referral::getCommDetailsByRefId($ref_id));
-	}
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.

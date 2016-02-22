@@ -126,12 +126,8 @@ class ActivityController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		date_default_timezone_set("Asia/Manila");
 		
-		$activity=new Activity();
-		$activity->act_desc='Viewed Audit Trails';
-		$activity->act_datetime=date('Y-m-d G:i:s');
-		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-		$activity->save();
 
 		$model=new Activity('search');
 		$model->unsetAttributes();  // clear any default values

@@ -1,3 +1,28 @@
+
+<?php
+
+$basePath = dirname(__FILE__);
+require_once($basePath . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'Mobile_Detect.php');
+
+/**
+ * Wrapper for Mobile_Detect @link https://github.com/serbanghita/Mobile-Detect
+ * @author Alexey Salnikov <me@iamsalnikov.ru>
+ */
+
+class MobileDetect extends CApplicationComponent
+{
+    private $_mobileDetect;
+
+    public function init()
+    {
+        $this->_mobileDetect = new Mobile_Detect();
+    }
+
+    public function __call($name, $parameters)
+    {
+        return call_user_func_array(array($this->_mobileDetect, $name), $parameters);
+    }
+} ?>
 <?php
 
 // uncomment the following to define a path alias
@@ -31,6 +56,14 @@ return array(
 		
 	),
 
+  
+ 
+    
+ 
+    
+
+ 
+    
 	// application components
 	'components'=>array(
 		'user'=>array(
@@ -38,6 +71,10 @@ return array(
 			'allowAutoLogin'=>true,
 			'class'=>'WebUser'
 		),
+
+		'mobileDetect' => array(
+        'class' => 'ext.MobileDetect.MobileDetect'
+    ),
 		'bootstrap'=>array(
 						'class'=>'ext.bootstrap.components.Bootstrap',
 						'responsiveCss'=>true,
@@ -60,11 +97,11 @@ return array(
 		// uncomment the following to use a MySQL database
 		
 		'db'=>array(
-			'connectionString' 	=> 'mysql:host=localhost;dbname=lis-pglu',
-			'emulatePrepare' 	=> true,
-			'username' 			=> 'root',
-			'password' 			=> '',
-			'charset' 			=> 'utf8',
+			'connectionString' => 'mysql:host=localhost;dbname=lis-pglu',
+			'emulatePrepare' => true,
+			'username' => 'root',
+			'password' => '',
+			'charset' => 'utf8',
 		),
 		
 		'errorHandler'=>array(

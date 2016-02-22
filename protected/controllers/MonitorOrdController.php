@@ -28,16 +28,16 @@ class MonitorOrdController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('download','view','create','update'),
-				'roles'=>array('SCR-T', 'SYSAD'),
+				'actions'=>array('download','index','view','create','update','admin','downloadOrdinance'),
+				'roles'=>array('SCR-T'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('delete'),
+				'actions'=>array('delete','download','downloadOrdinance'),
 				'roles'=>array('SYSAD'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('admin','index','downloadOrdinance'),
-				'roles'=>array('SCR-RF','SCR-RC','BOKAL','VG','SCR-BOK', 'SCR-T', 'SYSAD'),
+				'actions'=>array('admin','index','download','downloadOrdinance'),
+				'roles'=>array('SCR-RF','SCR-RC','BOKAL','VG','SCR-BOK'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -50,63 +50,63 @@ class MonitorOrdController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionDownloadOrdinance($id){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Downloaded Ordinance No. '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
 		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 		$activity->save();
 
-        $model = Ordinance::model()->findByPK($id);
-        $year=substr($model->ord_no, strlen($model->ord_no)-4);
-        $file= $model->ordi_file;
-        
+            $model = Ordinance::model()->findByPK($id);
+            $year=substr($model->ord_no, strlen($model->ord_no)-4);
+            $file= $model->ordi_file;
         if (file_exists(Yii::getPathOfAlias('webroot').'/protected/document/Ordinance/'.$year.'/'.$model->ord_no.'/'.$file)) {
-		    header('Content-Description: File Transfer');
-		    header('Content-Type: application/octet-stream');
-		    header('Content-Disposition: attachment; filename='.basename(Yii::getPathOfAlias('webroot').'/protected/document/Ordinance/'.$year.'/'.$model->ord_no.'/'.$file));
-		    header('Content-Transfer-Encoding: binary');
-		    header('Expires: 0');
-		    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		    header('Pragma: public');
-		    header('Content-Length: ' . filesize(Yii::getPathOfAlias('webroot').'/protected/document/Ordinance/'.$year.'/'.$model->ord_no.'/'.$file));
-		    ob_clean();
-		    flush();
-		    readfile(Yii::getPathOfAlias('webroot').'/protected/document/Ordinance/'.$year.'/'.$model->ord_no.'/'.$file);
-		    exit;
-		}
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename='.basename(Yii::getPathOfAlias('webroot').'/protected/document/Ordinance/'.$year.'/'.$model->ord_no.'/'.$file));
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize(Yii::getPathOfAlias('webroot').'/protected/document/Ordinance/'.$year.'/'.$model->ord_no.'/'.$file));
+    ob_clean();
+    flush();
+    readfile(Yii::getPathOfAlias('webroot').'/protected/document/Ordinance/'.$year.'/'.$model->ord_no.'/'.$file);
+    exit;
+		}else{
+			
+		}	
 	}
 	public function actionDownload($id){
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Downloaded Monitor Ordinance Form';
 		$activity->act_datetime=date('Y-m-d G:i:s');
 		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 		$activity->save();
-
-        $model = MonitorOrd::model()->findByPK($id);
-        $year=substr($model->ord_no, strlen($model->ord_no)-4);
-        $file= $model->monitor_form;
-
+            $model = MonitorOrd::model()->findByPK($id);
+            $year=substr($model->ord_no, strlen($model->ord_no)-4);
+            $file= $model->monitor_form;
         if (file_exists(Yii::getPathOfAlias('webroot').'/protected/document/monitorOrd/'.$year.'/'.$model->ord_no.'/'.$file)) {
-		    header('Content-Description: File Transfer');
-		    header('Content-Type: application/octet-stream');
-		    header('Content-Disposition: attachment; filename='.basename(Yii::getPathOfAlias('webroot').'/protected/document/monitorOrd/'.$year.'/'.$model->ord_no.'/'.$file));
-		    header('Content-Transfer-Encoding: binary');
-		    header('Expires: 0');
-		    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		    header('Pragma: public');
-		    header('Content-Length: ' . filesize(Yii::getPathOfAlias('webroot').'/protected/document/monitorOrd/'.$year.'/'.$model->ord_no.'/'.$file));
-		    ob_clean();
-		    flush();
-		    readfile(Yii::getPathOfAlias('webroot').'/protected/document/monitorOrd/'.$year.'/'.$model->ord_no.'/'.$file);
-		    exit;	
-		}
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename='.basename(Yii::getPathOfAlias('webroot').'/protected/document/monitorOrd/'.$year.'/'.$model->ord_no.'/'.$file));
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize(Yii::getPathOfAlias('webroot').'/protected/document/monitorOrd/'.$year.'/'.$model->ord_no.'/'.$file));
+    ob_clean();
+    flush();
+    readfile(Yii::getPathOfAlias('webroot').'/protected/document/monitorOrd/'.$year.'/'.$model->ord_no.'/'.$file);
+    exit;
+		}else{
+			
+		}	
 	}
-
 	public function actionView($id)
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Monitor Ordinance ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -136,36 +136,32 @@ class MonitorOrdController extends Controller
 			$model->input_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 			$model->archive=0;
 			$picture_name='';
-            $picture_file = CUploadedFile::getInstance($model,'monitor_form');
-            $model->monitor_form=$picture_file;
-            
-            if($picture_file){ 
-
+                $picture_file = CUploadedFile::getInstance($model,'monitor_form');
+                $model->monitor_form=$picture_file;
+                
+                if($picture_file){ 
                 $picture_name = $picture_file->name;
-
                 if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y'))){
                 	mkdir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y'));
                 }
 
-				if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no)){
-				 mkdir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no);
-				 $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no.'/'.$picture_file->getName());
+                          if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no)){
+                             mkdir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no);
+                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no.'/'.$picture_file->getName());
 
-				}
-				else{
-				 $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no.'/'.$picture_file->getName());
-				}
-            }
-
-			if($model->save()) {
-				$activity=new Activity();
-				$activity->act_desc='Added Another Monitor Ordinance';
-				$activity->act_datetime=date('Y-m-d G:i:s');
-				$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-				$activity->save();
+                            }
+                            else{
+                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no.'/'.$picture_file->getName());
+                            }
+                }
+			if($model->save())
+				date_default_timezone_set("Asia/Manila");
+		$activity=new Activity();
+		$activity->act_desc='Added Another Monitor Ordinance';
+		$activity->act_datetime=date('Y-m-d G:i:s');
+		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+		$activity->save();
 				$this->redirect(array('view','id'=>$model->monitor_id));
-			}			
-		
 		}
 
 		$this->render('create',array(
@@ -194,33 +190,32 @@ class MonitorOrdController extends Controller
 			$model->input_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
 			$model->archive=0;
 			$picture_name='';
-            $picture_file = CUploadedFile::getInstance($model,'monitor_form');
-            $model->monitor_form=$picture_file;
-            
-            if($picture_file){ 
+                $picture_file = CUploadedFile::getInstance($model,'monitor_form');
+                $model->monitor_form=$picture_file;
+                
+                if($picture_file){ 
+                $picture_name = $picture_file->name;
+                if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y'))){
+                	mkdir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y'));
+                }
 
-            	$picture_name = $picture_file->name;
+                          if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no)){
+                             mkdir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no);
+                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no.'/'.$picture_file->getName());
 
-	            if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y'))) {
-	            	mkdir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y'));
-	            }
-
-				if(!is_dir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no)){
-					mkdir(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no);
-					$picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no.'/'.$picture_file->getName());
-				} else {
-					$picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no.'/'.$picture_file->getName());
-				}
-            }
-			if($model->save()) {				
-				$activity=new Activity();
-				$activity->act_desc='Updated Monitor Ordinance ID: '.$id;
-				$activity->act_datetime=date('Y-m-d G:i:s');
-				$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-				$activity->save();
-				$this->redirect(array('view','id'=>$model->monitor_id));				
-			}
-
+                            }
+                            else{
+                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/protected/document/MonitorOrd/'.date('Y').'/'.$model->ord_no.'/'.$picture_file->getName());
+                            }
+                }
+			if($model->save())
+				date_default_timezone_set("Asia/Manila");
+		$activity=new Activity();
+		$activity->act_desc='Updated Monitor Ordinance ID: '.$id;
+		$activity->act_datetime=date('Y-m-d G:i:s');
+		$activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+		$activity->save();
+				$this->redirect(array('view','id'=>$model->monitor_id));
 		}
 
 		$this->render('update',array(
@@ -239,7 +234,7 @@ class MonitorOrdController extends Controller
 		$x=MonitorOrd::model()->findByPk($id);
 		$x->archive=1;
 		$x->save();
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Archived Monitor Ordinance ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -267,7 +262,7 @@ class MonitorOrdController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Monitor Ordinance List';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -275,17 +270,17 @@ class MonitorOrdController extends Controller
 		$activity->save();
 		$model=new MonitorOrd('search');
 		$model->unsetAttributes();  // clear any default values
-
-		if(isset($_GET['MonitorOrd'])) {
+		if(isset($_GET['MonitorOrd']))
+			
 			$model->attributes=$_GET['MonitorOrd'];
 						
-			if(!empty($model->agency_id)){
-            	$u=implode(',',$model->agency_id);
-            	$model->agency_id=$u;
-            } else {
-                $model->agency_id='';
-            }
-		}			
+						if(!empty($model->agency_id)){
+                        	$u=implode(',',$model->agency_id);
+                        	$model->agency_id=$u;
+                        }
+                        else{
+                            $model->agency_id='';
+                        }
 
 		$this->render('admin',array(
 			'model'=>$model,

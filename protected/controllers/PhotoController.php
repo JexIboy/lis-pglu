@@ -70,6 +70,30 @@ class PhotoController extends Controller
 		if(isset($_POST['Photo']))
 		{
 			$model->attributes=$_POST['Photo'];
+			$picture_name='';
+                $picture_file = CUploadedFile::getInstance($model,'file');
+                $model->file=$picture_file;
+                
+                if($picture_file){ 
+                $picture_name = $picture_file->name;
+                if(!is_dir(Yii::getPathOfAlias('webroot').'/themes/gallery-images/')) {
+                	mkdir(Yii::getPathOfAlias('webroot').'/themes/gallery-images/');
+                }
+
+                          if(!is_dir(Yii::getPathOfAlias('webroot').'/themes/gallery-images/')){
+                             mkdir(Yii::getPathOfAlias('webroot').'/themes/gallery-images/');
+                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/themes/gallery-images'.$picture_file->getName());
+
+                            }
+                            else{
+                             $picture_file->SaveAs(Yii::getPathOfAlias('webroot').'/themes/gallery-images'.$picture_file->getName());
+                            }
+                }
+
+
+
+
+
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->photo_id));
 		}

@@ -45,7 +45,7 @@ class OriginController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionView($id)
-	{
+	{date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Origin ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -72,7 +72,7 @@ class OriginController extends Controller
 		{
 			$model->attributes=$_POST['Origin'];
 			if($model->save() &&  $model->validate()){
-				
+				date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Added Another Origin';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -103,7 +103,7 @@ class OriginController extends Controller
 		{
 			$model->attributes=$_POST['Origin'];
 			if($model->save())
-				
+				date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Updated Origin ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -125,7 +125,7 @@ class OriginController extends Controller
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Deleted Origin ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -153,7 +153,7 @@ class OriginController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Origin List';
 		$activity->act_datetime=date('Y-m-d G:i:s');

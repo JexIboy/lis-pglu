@@ -2,6 +2,7 @@
 
 class SiteController extends Controller
 {
+		
 	/**
 	 * Declares class-based actions.
 	 */
@@ -49,199 +50,182 @@ class SiteController extends Controller
 	}
 	
 	public function series($noMonth){
-
 		$officials=Officials::model()->findAll(array('condition'=>'now() >= start_date and now() <= end_date','order'=>'off_id asc'));
-		$resolutions=Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-'.$noMonth.'%"'));
+$resolutions=Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-'.$noMonth.'%"'));
 
-		$series=array();
-		$off=array();
-		$off2=array();
-		$x=0;
+$series=array();
+$off=array();
+$off2=array();
+$x=0;
+foreach($officials as $v){
+    $off2[$v->off_id]=0;
+    $x++;
+}
 
-		foreach($officials as $v){
-		    $off2[$v->off_id]=0;
-		    $x++;
-		}
+foreach($officials as $val){
+  array_push($off,$val->off_id);
+}
 
-		foreach($officials as $val){
-		  array_push($off,$val->off_id);
-		}
+foreach($resolutions as $reso){
+    $temp_reso=explode(',',$reso->author);
 
-		foreach($resolutions as $reso){
-		    $temp_reso=explode(',',$reso->author);
+      foreach($off as $val){
+          if (in_array($val, $temp_reso)) {
+              $off2[$val]++;
+          }
 
-		      foreach($off as $val){
-		          if (in_array($val, $temp_reso)) {
-		              $off2[$val]++;
-		          }
+      }
+}
 
-		      }
-		}
+foreach($off2 as $values=>$key){
+  $temp=array('name'=>Officials::model()->findByPK($values)->Fullname,'data'=>array($key));
 
-		foreach($off2 as $values=>$key){
-		  	$temp=array('name'=>Officials::model()->findByPK($values)->Fullname,'data'=>array($key));
-
-		  	array_push($series,$temp);
-		  
-		}
-
-		return $series;
+  array_push($series,$temp);
+  
+}
+return $series;
 
 	}
 
 	public function actionForumPage(){
-		$this->render('forumPage');
-	}
+	$this->render('forumPage');
+}
 
-	public function actionMain_forum(){
-		$model=new ForumQuestion('search');
-		$model->unsetAttributes();  // clear any default values
-			if(isset($_GET['ForumQuestion']))
-				$model->attributes=$_GET['ForumQuestion'];
+public function actionMain_forum(){
+	$model=new ForumQuestion('search');
+	$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['ForumQuestion']))
+			$model->attributes=$_GET['ForumQuestion'];
 
-		$this->render('main_forum',array('model'=>$model));
-	}
-
-	public function actioncreate_topic(){
-
-		$model=new ForumQuestion();
-
-		if(isset($_POST['ForumQuestion'])) {
+	$this->render('main_forum',array('model'=>$model));
+}
+public function actioncreate_topic(){
+	$model=new ForumQuestion();
+	if(isset($_POST['ForumQuestion']))
+		{
 			$model->attributes=$_POST['ForumQuestion'];
 			$model->datetime=date('Y-m-d H:i:s');
 			$model->view=0;
 			$model->reply=0;
 			$model->confirmation=0;
-
-			if($model->save()) {
+			if($model->save())
 				$this->redirect(array('main_forum'));
-			}
 		}
+	$this->render('create_topic',array('model'=>$model));
+}
+public function actionview_topic($id){
+	$modelAnswer=new ForumAnswer;
 
-		$this->render('create_topic',array('model'=>$model));
-	}
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
 
-	public function actionview_topic($id){
-		$modelAnswer=new ForumAnswer;
-
-			// Uncomment the following line if AJAX validation is needed
-			// $this->performAjaxValidation($model);
-
-			if(isset($_POST['ForumAnswer'])) {
-				$modelAnswer->attributes=$_POST['ForumAnswer'];
+		if(isset($_POST['ForumAnswer']))
+		{
+			$modelAnswer->attributes=$_POST['ForumAnswer'];
 
 				$modelAnswer->a_id=$id;
 				$modelAnswer->a_datetime=date('Y-m-d h:i:sa');
 				$x=ForumQuestion::model()->findByPK($id);
 				$x->reply=$x->reply+1;
 				$x->save();
+			if($modelAnswer->save())
+				
+				$this->redirect(array('view_topic','id'=>$id));
+		}
 
-				if($modelAnswer->save()) {
-					$this->redirect(array('view_topic','id'=>$id));
-				}
-			}
+	$this->render('view_topic',array('modelAnswer'=>$modelAnswer,'model'=>ForumQuestion::model()->findByPK($id)));
+}
+public function actionadd_answer(){
+	$this->render('add_answer');
+}
+public function actionadd_topic(){
+	$this->render('add_topic');
+}
 
-		$this->render('view_topic',array('modelAnswer'=>$modelAnswer,'model'=>ForumQuestion::model()->findByPK($id)));
-	}
-
-	public function actionadd_answer(){
-		$this->render('add_answer');
-	}
-
-	public function actionadd_topic(){
-		$this->render('add_topic');
-	}
-
-	public function actionviewphotosPage(){
-		$galleryModel=new PhotoGallery();
-		$photoModel=new Photo();
-		$this->render('viewphotosPage',array('galleryModel'=>$galleryModel,'photoModel'=>$photoModel));
-	}
-
-	public function actionevents(){
-		$this->render('events');
-	}
-
+public function actionviewphotosPage(){
+	$galleryModel=new PhotoGallery();
+	$photoModel=new Photo();
+	$this->render('viewphotosPage',array('galleryModel'=>$galleryModel,'photoModel'=>$photoModel));
+}
+public function actionevents(){
+	$this->render('events');
+}
 	public function actionIndex()
 	{
 		$reso=new Resolution('searchIndex');
 		$reso->unsetAttributes();  // clear any default values
-
-		if(isset($_GET['Resolution'])) {
+			if(isset($_GET['Resolution']))
 			$reso->attributes=$_GET['Resolution'];
-		}
 
 		$ordi=new Ordinance('search');
 		$ordi->unsetAttributes();  // clear any default values
-			
-		if(isset($_GET['Ordinance'])) {
+			if(isset($_GET['Ordinance']))
 			$ordi->attributes=$_GET['Ordinance'];
-		}
 
 		$fquestion=new ForumQuestion('searchPosted');
 		$fquestion->unsetAttributes();  // clear any default values
-
-		if(isset($_GET['ForumQuestion'])) {
+			if(isset($_GET['ForumQuestion']))
 			$model->attributes=$_GET['ForumQuestion'];
-		}
 
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 		$months=array('January','February','March','April','May','June','July','August','September','October','November','December');
-		$months_data = array();
+		$jan=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-01%"')));
+		$feb=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-02%"')));
+		$mar=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-03%"')));
+		$apr=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-04%"')));
+		$may=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-05%"')));
+		$jun=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-06%"')));
+		$jul=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-07%"')));
+		$aug=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-08%"')));
+		$sep=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-09%"')));
+		$oct=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-10%"')));
+		$nov=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-11%"')));
+		$dec=count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-12%"')));
+		$months_data=array($jan, $feb, $mar, $apr, $may, $jun, $jul, $aug, $sep, $oct, $nov, $dec);
 
-		for ($no_month = 0; $no_month < count($months); $no_month++) {
-			$months_data[] = count(Resolution::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-'.str_pad($no_month, 2, '0', STR_PAD_LEFT).'%"')));
-		}
+		$jan1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-01%"')));
+		$feb1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-02%"')));
+		$mar1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-03%"')));
+		$apr1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-04%"')));
+		$may1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-05%"')));
+		$jun1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-06%"')));
+		$jul1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-07%"')));
+		$aug1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-08%"')));
+		$sep1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-09%"')));
+		$oct1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-10%"')));
+		$nov1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-11%"')));
+		$dec1=count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-12%"')));
+		$months_dataOrd=array($jan1, $feb1, $mar1, $apr1, $may1, $jun1, $jul1, $aug1, $sep1, $oct1, $nov1, $dec1);
 
-		$months_dataOrd = array();
 
-		for ($no_month = 0; $no_month < count($months); $no_month++) {
-			$months_dataOrd[] = count(Ordinance::model()->findAll(array('condition'=>'date_passed like "'.date('Y').'-'.str_pad($no_month, 2, '0', STR_PAD_LEFT).'%"')));
-		}
-
-		$sql = 'select distinct substring(res_no,6,9) as reso from tbl_resolution order by date_passed asc';
-		$connection=Yii::app()->db;
-		$command=$connection->createCommand($sql);
-		$years=$command->queryAll();
-
+		$sql='select distinct substring(res_no,6,9) as reso from tbl_resolution order by date_passed asc';
+			$connection=Yii::app()->db;
+			$command=$connection->createCommand($sql);
+			$years=$command->queryAll();
 		$sql1='select distinct substring(ord_no,6,9) as ordi from tbl_ordinance order by date_passed asc';
-		$connection1=Yii::app()->db;
-		$command1=$connection->createCommand($sql1);
-		$yearsOrd=$command1->queryAll();
+			$connection1=Yii::app()->db;
+			$command1=$connection->createCommand($sql1);
+			$yearsOrd=$command1->queryAll();
 
 		$y=array();
-
-		foreach($years as $value){
-			$y[] = count(Resolution::model()->findAll(array('condition'=>'res_no like "%'.$value['reso'].'"')));
-		}
-
+ 			foreach($years as $value){
+ 				array_push($y,count(Resolution::model()->findAll(array('condition'=>'res_no like "%'.$value['reso'].'"'))));
+			}
 		$yOrd=array();
-
-		foreach($yearsOrd as $value){
-			$yOrd = count(Ordinance::model()->findAll(array('condition'=>'ord_no like "%'.$value['ordi'].'"')));
-		}
-
-		if(!empty(User::model()->findByPK(Yii::app()->user->name)->emp_id)){
-
-		    $activity=new Activity();
-		    $activity->act_desc='Return to Homepage';
-		    $activity->act_datetime=date('Y-m-d G:i:s');
-		    $activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-		    $activity->save();
-
-		}
-
-		$this->render('index',array(
-								'months_dataOrd'=>$months_dataOrd,
-								'months'=>$months,
-								'months_data'=>$months_data,
-								'years'=>$years,
-								'yOrd'=>$yOrd,
-								'years_data'=>$y,
-								'reso'=>$reso,
-								'ordi'=>$ordi,
-								'fquestion'=>$fquestion
+ 			foreach($yearsOrd as $value){
+ 				array_push($yOrd,count(Ordinance::model()->findAll(array('condition'=>'ord_no like "%'.$value['ordi'].'"'))));
+			}
+			if(!empty(User::model()->findByPK(Yii::app()->user->name)->emp_id)){
+			date_default_timezone_set("Asia/Manila");
+    $activity=new Activity();
+    $activity->act_desc='Return to Homepage';
+    $activity->act_datetime=date('Y-m-d G:i:s');
+    $activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+    $activity->save();
+			}
+		$this->render('index',array('months_dataOrd'=>$months_dataOrd,
+			'months'=>$months,'months_data'=>$months_data,'years'=>$years,'yOrd'=>$yOrd,'years_data'=>$y,'reso'=>$reso,'ordi'=>$ordi,'fquestion'=>$fquestion
 		));
 
 	}
@@ -249,6 +233,8 @@ class SiteController extends Controller
 	public function actionForumMain(){
 		$this->render('forumMain');
 	}
+
+
 
 	/**
 	 * This is the action to handle external exceptions.
@@ -271,43 +257,43 @@ class SiteController extends Controller
 	{
 		require(Yii::getPathOfAlias('webroot').'/protected/extensions/YiiMailer/PHPMailer/'.'class.phpmailer.php');
 		$model=new ContactForm;
-
-		if(isset($_POST['ContactForm'])) {
+		if(isset($_POST['ContactForm']))
+		{
 			$model->attributes=$_POST['ContactForm'];
-
-			if($model->validate()) {
+			if($model->validate())
+			{
 				$mail = new PHPMailer(true); //New instance, with exceptions enabled
 
-			    $body             = "Dear LIS-PGLU Administrator,<br><br>".$model->body;
-			    $body             = preg_replace('/\\\\/','', $body); //Strip backslashes
+    $body             = "Dear LIS-PGLU Administrator,<br><br>".$model->body;
+    $body             = preg_replace('/\\\\/','', $body); //Strip backslashes
 
-			    $mail->IsSMTP();                           // tell the class to use SMTP
-			    $mail->SMTPAuth   = true;
-			    $mail->SMTPSecure = "ssl";                  // enable SMTP authentication
-			    $mail->Host       = "smtp.gmail.com";                  // set the SMTP server port
-			     // SMTP server
-			    $mail->Username   = "johnbillymarbella@gmail.com";   // SMTP server username
-			    $mail->Password   = "ZAIDOBLACK";            // SMTP server passwor
-			    $mail->Host       = "smtp.gmail.com";
-			    $mail->Port       = 465;
+    $mail->IsSMTP();                           // tell the class to use SMTP
+    $mail->SMTPAuth   = true;
+    $mail->SMTPSecure = "ssl";                  // enable SMTP authentication
+    $mail->Host       = "smtp.gmail.com";                  // set the SMTP server port
+     // SMTP server
+    $mail->Username   = "johnbillymarbella@gmail.com";   // SMTP server username
+    $mail->Password   = "ZAIDOBLACK";            // SMTP server passwor
+    $mail->Host       = "smtp.gmail.com";
+    $mail->Port       = 465;
 
-			    $mail->AddReplyTo($model->email,"LIS-PGLU Administrator");
+    $mail->AddReplyTo($model->email,"LIS-PGLU Administrator");
 
-			    $mail->From       = $model->email;
-			    $mail->FromName   = $model->email;
+    $mail->From       = $model->email;
+    $mail->FromName   = $model->email;
 
-			    $to = "johnbillymarbella@gmail.com";
+    $to = "johnbillymarbella@gmail.com";
 
-			    $mail->AddAddress($to);
+    $mail->AddAddress($to);
 
-			    $mail->Subject  = $model->subject;
+    $mail->Subject  = $model->subject;
 
-			    $mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
-			    $mail->WordWrap   = 80; // set word wrap
+    $mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+    $mail->WordWrap   = 80; // set word wrap
 
-			    $mail->MsgHTML($body);
+    $mail->MsgHTML($body);
 
-			    $mail->IsHTML(true); // send as HTML
+    $mail->IsHTML(true); // send as HTML
 
 				//send
 				if ($mail->Send()) {
@@ -320,7 +306,6 @@ class SiteController extends Controller
 				$this->refresh();
 			}
 		}
-
 		$this->render('contact',array('model'=>$model));
 	}
 	/**
@@ -329,6 +314,7 @@ class SiteController extends Controller
 	public function actionLogin()
 	{
 			
+
 		$model=new LoginForm;
 
 		// if it is ajax validation request
@@ -346,13 +332,14 @@ class SiteController extends Controller
 			
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login()){
-				$this->redirect(Yii::app()->user->returnUrl);
-			    $activity=new Activity();
-			    $activity->act_desc='Logged In';
-			    $activity->act_datetime=date('Y-m-d G:i:s');
-			    $activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
-			    $activity->save();
-			}
+$this->redirect(Yii::app()->user->returnUrl);	
+				date_default_timezone_set("Asia/Manila");
+    $activity=new Activity();
+    $activity->act_desc='Logged In';
+    $activity->act_datetime=date('Y-m-d G:i:s');
+    $activity->act_by=User::model()->findByPK(Yii::app()->user->name)->emp_id;
+    $activity->save();
+}
 			
 		}
 		// display the login form
@@ -366,14 +353,13 @@ class SiteController extends Controller
 	 */
 	public function actionLogout()
 	{
-	    $activity=new Activity();
-	    $activity->act_desc='Logged Out';
-	    $activity->act_datetime=date('Y-m-d G:i:s');
-	    $activity->act_by=User::model()->findByAttributes(array('username'=>Yii::app()->user->id))->emp_id;;
-	    $activity->save();
-		
+		date_default_timezone_set("Asia/Manila");
+    $activity=new Activity();
+    $activity->act_desc='Logged Out';
+    $activity->act_datetime=date('Y-m-d G:i:s');
+    $activity->act_by=User::model()->findByAttributes(array('username'=>Yii::app()->user->id))->emp_id;;
+    $activity->save();
 		Yii::app()->user->logout();
-		
 		$this->redirect(Yii::app()->homeUrl);
 	}
 }

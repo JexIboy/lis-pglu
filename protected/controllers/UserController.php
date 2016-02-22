@@ -46,7 +46,7 @@ class UserController extends Controller
 	 */
 	public function actionView($id)
 	{
-		
+		date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Viewed User ID: '.$id;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -75,7 +75,7 @@ class UserController extends Controller
             $model->retype_password=md5($model->retype_password);
 			
 			if($model->save())
-				
+				date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Added Another User';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -107,7 +107,7 @@ class UserController extends Controller
             $model->password=md5($model->password);
             $model->retype_password=md5($model->retype_password);
 			if($model->save())
-				
+				date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Updated User ID: '.$id;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -129,7 +129,7 @@ class UserController extends Controller
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
-		
+		date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Deleted User ID: '.$id;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -157,7 +157,7 @@ class UserController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		
+		date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Viewed User List';
     $activity->act_datetime=date('Y-m-d G:i:s');

@@ -44,7 +44,7 @@ class ReportsOthersController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
   public function actionViewTracking(){
-    
+    date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Viewed Tracking List of Communication';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -64,7 +64,7 @@ class ReportsOthersController extends Controller
     ));
   }
   public function actionAgendaMaker(){
-    
+    date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Viewed Agenda List';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -83,7 +83,7 @@ class ReportsOthersController extends Controller
             $this->render('agendaMaker',array('model'=>$model));
         }
     public function actionPrintAgendaMaker($id){
-      
+      date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Printed Agenda ID: '.$id;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -97,7 +97,7 @@ class ReportsOthersController extends Controller
             $this->renderPartial('printAgendaMaker',array('model'=>$model,'communication'=>$communication,'resoMeeting'=>$resoMeeting,'ordMeeting'=>$ordMeeting));
         }
     public function actionViewAgenda($id){
-      
+      date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Viewed Agenda ID: '.$id;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -156,7 +156,7 @@ class ReportsOthersController extends Controller
                      $listReso=CommMeetingReso::model()->findAll($criteria);
                      $listOrd=CommMeetingOrdi::model()->findAll($criteria);
 
-                     
+                     date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Printed Monthly Committee Report of '.$x->comm_name;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -165,7 +165,7 @@ class ReportsOthersController extends Controller
                                 $this->renderPartial('printCommReportMonthly',array('listOrd'=>$listOrd,'listReso'=>$listReso,'comm_name'=>$x->comm_name,'month'=>$month,'year'=>$year));
     }
 	public function actionCommReportMonthly(){
-    
+    date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Searched Monthly Committee Report per Committee';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -206,7 +206,7 @@ class ReportsOthersController extends Controller
                 'pageSize' => 20,
             ),
         )); 
-              
+              date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Searched Monthly Committe Report of '.$x->comm_name;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -257,7 +257,7 @@ public function actionPrintCommReportYearly($model){
                      $listReso=CommMeetingReso::model()->findAll($criteria);
                      $listOrd=CommMeetingOrdi::model()->findAll($criteria);
 
-                    
+                    date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Searched Yearly Committe Report of '.$x->comm_name;
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -266,7 +266,7 @@ public function actionPrintCommReportYearly($model){
                                 $this->renderPartial('printCommReportYearly',array('listOrd'=>$listOrd,'listReso'=>$listReso,'comm_name'=>$x->comm_name,'year'=>$year));
     }
         public function actionCommReportYearly(){
-          
+          date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Searched Yearly Committe Report per Committe';
     $activity->act_datetime=date('Y-m-d G:i:s');
@@ -306,7 +306,7 @@ public function actionPrintCommReportYearly($model){
             ),
         )); 
                         
-                        
+                        date_default_timezone_set("Asia/Manila");
     $activity=new Activity();
     $activity->act_desc='Searched Yearly Committe Report of '.$x->comm_name;
     $activity->act_datetime=date('Y-m-d G:i:s');

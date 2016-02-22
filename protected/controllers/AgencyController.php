@@ -43,7 +43,7 @@ class AgencyController extends Controller
 	 */
 	public function actionView($id)
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Agency ID: '.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -70,7 +70,7 @@ class AgencyController extends Controller
 		{
 			$model->attributes=$_POST['Agency'];
 			if($model->save())
-				
+				date_default_timezone_set("Asia/Manila");
 				$activity=new Activity();
 				$activity->act_desc='Added Another Agency';
 				$activity->act_datetime=date('Y-m-d G:i:s');
@@ -102,7 +102,7 @@ class AgencyController extends Controller
 		{
 			$model->attributes=$_POST['Agency'];
 			if($model->save())
-				
+				date_default_timezone_set("Asia/Manila");
 				$activity=new Activity();
 				$activity->act_desc='Updated Agency ID :'.$model->agency_id.' Information';
 				$activity->act_datetime=date('Y-m-d G:i:s');
@@ -126,7 +126,7 @@ class AgencyController extends Controller
 	{
 		$this->loadModel($id)->delete();
 
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Deleted Agency ID: '.$id.'Information';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -154,7 +154,7 @@ class AgencyController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Agency List';
 		$activity->act_datetime=date('Y-m-d G:i:s');

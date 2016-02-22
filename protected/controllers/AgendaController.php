@@ -51,7 +51,7 @@ class AgendaController extends Controller
 	 */
 	public function actionView($id)
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Agenda ID :'.$id;
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -78,7 +78,7 @@ class AgendaController extends Controller
 		{
 			$model->attributes=$_POST['Agenda'];
 			if($model->save())
-				
+				date_default_timezone_set("Asia/Manila");
 				$activity=new Activity();
 				$activity->act_desc='Added Another Agenda';
 				$activity->act_datetime=date('Y-m-d G:i:s');
@@ -109,7 +109,7 @@ class AgendaController extends Controller
 		{
 			$model->attributes=$_POST['Agenda'];
 			if($model->save())
-				
+				date_default_timezone_set("Asia/Manila");
 				$activity=new Activity();
 				$activity->act_desc='Updated Agenda ID: '.$id;
 				$activity->act_datetime=date('Y-m-d G:i:s');
@@ -135,7 +135,7 @@ class AgendaController extends Controller
 		$x=Agenda::model()->findByPk($id);
 		$x->confirmation=1;
 		$x->save();
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Agenda ID: '.$id.'Moved to Archive';
 		$activity->act_datetime=date('Y-m-d G:i:s');
@@ -163,7 +163,7 @@ class AgendaController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		
+		date_default_timezone_set("Asia/Manila");
 		$activity=new Activity();
 		$activity->act_desc='Viewed Agenda List';
 		$activity->act_datetime=date('Y-m-d G:i:s');
