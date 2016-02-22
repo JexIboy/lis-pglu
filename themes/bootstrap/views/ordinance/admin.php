@@ -62,7 +62,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 		array('name'=>'ord_no','type'=>'raw','value'=>'CHtml::link($data->ord_no,array("ordinance/download","id"=>$data->ord_no))','htmlOptions'=>array('style'=>'width:10%;')),
 		'subj_matter',
 		//'meeting_ordi_id',
-		array('header'=>'Author','value'=>'$data->Author','htmlOptions'=>array('style'=>'width:20%;')),
+		array('header'=>'Author','value'=>'$data->getAuthor()','htmlOptions'=>array('style'=>'width:20%;')),
 		array('header'=>'First Reading','value'=>'$data->firstreading','htmlOptions'=>array('style'=>'width:10%;')),
 		array('header'=>'Second Reading','value'=>'$data->secondreading','htmlOptions'=>array('style'=>'width:10%;')),
 		array('header'=>'Third Reading','value'=>'$data->thirdreading','htmlOptions'=>array('style'=>'width:10%;')),

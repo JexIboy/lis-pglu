@@ -46,7 +46,7 @@ require(Yii::getPathOfAlias('webroot').'/protected/extensions/tcpdf/'.'tcpdf.php
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor(User::model()->findByPK(Yii::app()->user->name)->emp->Fullname);
 $pdf->SetTitle($mon.' '.$year.' Monthly Committee Report of '.$comm_name);
-
+$pdf->Ln(20);
 // set default header data
 $pdf->SetHeaderData('banner.jpg', PDF_HEADER_LOGO_WIDTH, 'Legislative Information System - Provincial Government of La Union v1.0');
 

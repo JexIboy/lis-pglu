@@ -32,11 +32,11 @@ $box = $this->beginWidget ( 'bootstrap.widgets.TbBox', array (
 
 	<?php echo $form->dropDownListRow($model,'res_no',CHtml::listData(Resolution::model()->findAll(),'res_no','res_no'),array('class'=>'span3','empty'=>'Choose Resolution No.')); ?>
     
-
+	<?php //echo $form->textFieldRow($model, 'res_no', array('class'=>'span4')); ?> 
 	<?php echo $form->textFieldRow($model, 'subj_matter', array('class'=>'span4')); ?> 
 
 	<?php echo $form->select2Row($model, 'author', array('asDropDownList' => true, 
-                                                                  'data' =>  CHtml::listData(Officials::model()->findAll(array('condition'=>'now() >= start_date')),'off_id','Fullname'),    
+                                                                  'data' =>  CHtml::listData(Officials::model()->findAll(''),'off_id','Fullname'),    
                                                                   'multiple'=> 'multiple',
                                                                   'data-placeholder'=> '       ------------ Select Author ------------',
                                                                     'options' => array(

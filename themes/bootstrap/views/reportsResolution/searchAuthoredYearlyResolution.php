@@ -1,7 +1,7 @@
 
 <?php
 $x=array();
-$startTime = strtotime('1970-05-01 12:00');
+$startTime = strtotime('2000-05-01 12:00');
 $endTime = strtotime('2020-05-10 12:00');
 
 // Loop between timestamps, 24 hours at a time
@@ -22,7 +22,6 @@ $box = $this->beginWidget ( 'bootstrap.widgets.TbBox', array (
 
 <br>
 <div class="span8">
-
 <div class="well form-inline">
 
     <?php echo CHtml::beginForm(); ?>
@@ -34,8 +33,7 @@ $box = $this->beginWidget ( 'bootstrap.widgets.TbBox', array (
                     'data'=>CHtml::listData(Officials::model()->findAll(),'off_id','fullname'),
                     'asDropDownList' => true, 
                 ));
-        ?>
-        
+        ?>        
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <?php echo CHtml::htmlButton('<i class="icon-search icon-white"></i> Search', array('class' => 'btn btn-success', 'type' => 'submit', 'name' => 'searchButton',)); ?>
          <br/>
@@ -53,10 +51,7 @@ $box = $this->beginWidget ( 'bootstrap.widgets.TbBox', array (
     </div>
     <?php echo CHtml::endForm(); ?>
 </div><!-- form -->
-
-
     <?php $this->endWidget(); ?>
-
 </div><!-- form -->
 </div><!-- search-form -->
 

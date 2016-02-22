@@ -7,6 +7,7 @@
 			'ngAria',
 			'ngAnimate',
 			'ngRoute',
-			'ngMaterial'
+			'ngMaterial',
+			'md.data.table'
 		]);
 })();

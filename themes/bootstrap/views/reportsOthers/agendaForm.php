@@ -41,6 +41,8 @@ $form = $this->beginWidget ( 'bootstrap.widgets.TbActiveForm', array (
 
     <?php echo $form->textFieldRow($model,'sp_batch_no',array('class'=>'span1'));?>
 
+    <?php //echo $form->textAreaRow($model, 'subject_matter', array('class'=>'span6', 'rows'=>5)); ?> 
+
     <?php echo $form->timepickerRow(
             $model,
             'session_time',

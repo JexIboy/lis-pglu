@@ -36,8 +36,16 @@ $box = $this->beginWidget ( 'bootstrap.widgets.TbBox', array (
 $this->widget('bootstrap.widgets.TbGridView', array(
         'id'=>'referral-grid',
 	'dataProvider'=>$model->forCommMeetingReso(),
-	'template'=>"{items}{pager}",
+	//'template'=>"{items}{pager}",
 	'filter'=>$model,
+	 'pager'=>array(
+            'class'=>'LinkPager',
+            'firstPageLabel'=>'FIRST',
+            'lastPageLabel'=>'LAST',
+            'nextPageLabel'=>'NEXT',
+            'prevPageLabel'=>'BACK',
+            'header'=>'',
+            ),
 	'columns'=>array(
 		array('header'=>'No.','value'=>'$row+1'),
 		array('name'=>'ctrl_no','value'=>'$data->ctrl_no'),

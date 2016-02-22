@@ -1,14 +1,12 @@
-
-
 p{
     color:black;
 	background-image: none; 
 }
 body{
 	margin-top: 0px;
-	background-color:#2578cb;
+	background-color:#9999FF;
 	}	
-#login{width:100%;
+#login{
 margin-top: 2%;
 margin-left: 40%;
 }
@@ -26,7 +24,6 @@ border:10px;
 #discforumside{float:left;
 }
 #home_banner{
-	background:url("../images/homepagepic.png");
 	background-size:100% 300px;
 	background-repeat:no-repeat;
 }
@@ -45,8 +42,6 @@ width:80%;
 
 }
 #leftCol{
-	
-	
 	background-color:white;
 }
 #leftpanel{
@@ -128,6 +123,10 @@ margin-top:1%;
 		text-align:left;
         font-size:15px;
 		color:white;
+		background-color:black;
+		opacity: 100;
+
+
 }
 
 

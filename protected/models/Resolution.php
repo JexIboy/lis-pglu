@@ -39,7 +39,12 @@ class Resolution extends CActiveRecord
 			array('res_no, ctrl_no, author, reso_file', 'length', 'max'=>100),
 			array('reso_file', 'safe'),
 			 array('reso_file', 'file',
-                'types'=> 'pdf','allowEmpty'=>true,
+                'types'=> 'pdf','allowEmpty'=>false, 'on' =>'insert',
+                'maxSize' => 1024 * 1024 * 100, // 100MB                
+                'tooLarge' => 'The file was larger than 100MB. Please upload a smaller file.',               
+            ),
+			  array('reso_file', 'file',
+                'types'=> 'pdf','allowEmpty'=>true, 'on' =>'update',
                 'maxSize' => 1024 * 1024 * 100, // 100MB                
                 'tooLarge' => 'The file was larger than 100MB. Please upload a smaller file.',               
             ),
@@ -93,23 +98,58 @@ class Resolution extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.		
 		$criteria=new CDbCriteria;
-		$criteria->condition='archive=0';
+			//$criteria->params=array(':author'=>$this->author);
+		$criteria->compare('t.author',$this->author,true);	
+		
+		if(!empty($this->author)){
+		$criteria->condition='t.author LIKE "'.$this->author.'" AND archive = 0';
+		}
+
+		
+		if(!empty($this->subj_matter)){
+			$criteria->condition = 't.subj_matter LIKE "%' .$this->subj_matter .'%"';	
+		}
+
+		if(!empty($this->date_passed)){
+		$criteria->condition='date_passed LIKE "'.$this->date_passed.'"';
+		}
+
+		if(!empty($this->subj_matter) && !empty($this->author)){
+			$criteria->condition='t.subj_matter LIKE "%' .$this->subj_matter .'%" AND t.author LIKE "'.$this->author.'" ';
+		}
+
+		if(!empty($this->subj_matter) && !empty($this->author) && !empty($this->date_passed)){
+			$criteria->condition='t.subj_matter LIKE "%' .$this->subj_matter .'%" AND t.author LIKE "'.$this->author.'" 
+			AND date_passed LIKE  "%' .$this->date_passed .'%"';
+		}
+
+		if(!empty($this->author) && !empty($this->res_no)){
+			$criteria->condition='"t.author LIKE "'.$this->author.'" 
+			AND reso_no LIKE  "%' .$this->res_no .'%"';
+		}
+
+		//if($this->author == "array[1,2]")
+			//{$criteria->condition='t.author LIKE "'.$this->author.'%" AND archive = 0';}
 		$criteria->compare('res_no',$this->res_no,true);	
-		$criteria->order = "date_passed ASC";
-		$criteria->compare('date_passed',$this->date_passed,true);
+		$criteria->order="date_passed ASC";
+		//$criteria->compare('date_passed',$this->date_passed,true);
 		$criteria->compare('ctrl_no',$this->ctrl_no,true);
-		$criteria->compare('subj_matter',$this->subj_matter,true);
-		$criteria->compare('author',$this->author,true);
+		//$criteria->compare('subj_matter',$this->subj_matter,true);
 		$criteria->compare('reso_file',$this->reso_file,true);
 		$criteria->compare('input_by',$this->input_by);
 		$criteria->compare('archive',$this->archive,true);
+		
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination' => array(
                 'pageSize' => 10,
             ),
+
 		));
+//echo "<pre";
+		//var_dump($author); exit;
 	}
+
 	public function viewArchive()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.		
@@ -130,6 +170,7 @@ class Resolution extends CActiveRecord
                 'pageSize' => 10,
             ),
 		));
+
 	}
 	public function searchIndex()
 	{
@@ -177,15 +218,15 @@ class Resolution extends CActiveRecord
 	}
 
 	public function getAuthor(){
-            $x=explode(',',$this->author);
+              $x=explode(',',$this->author);
             $names='';
             foreach($x as $value){
             $criteria=new CDbCriteria;
             $criteria->condition='off_id=:postID';
             $criteria->params=array(':postID'=>$value);
             $auth=  Officials::model()->find($criteria);
+            
             echo $auth->Fullname.'<br/>';
-                
             }
         }
 

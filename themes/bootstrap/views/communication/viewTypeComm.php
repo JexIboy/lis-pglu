@@ -28,8 +28,17 @@ $box = $this->beginWidget ( 'bootstrap.widgets.TbBox', array (
 $this->widget('bootstrap.widgets.TbGridView', array(
         'id'=>'communication-grid',
 	'dataProvider'=>$model,
-	'template'=>"{items}{pager}",
 	
+	//'template'=>"{items}{pager}",
+	'pager'=>array(
+            'class'=>'LinkPager',
+            
+            'firstPageLabel'=>'FIRST',
+            'lastPageLabel'=>'LAST',
+            'nextPageLabel'=>'NEXT',
+            'prevPageLabel'=>'BACK',
+            'header'=>'',
+            ),
 	'columns'=>array(
 		array('header'=>'No.','value'=>'$row+1','htmlOptions'=>array('style'=>'width:7%;')),
 		array('name'=>'ctrl_no','type'=>'raw','value'=>'CHtml::link($data->ctrl_no,array("communication/download","id"=>$data->ctrl_no))'),
@@ -44,8 +53,8 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 		*/
 		array(	'header'=>'Type of Communication',
     'class'=>'CButtonColumn',
-    'htmlOptions'=>array('style'=>'width:13%; text-align:center;'),
-    'template'=>'{urgent} {xurgent}',
+    'htmlOptions'=>array('style'=>'width:20%; text-align:center;'),
+    'template'=>'U{urgent} NU{xurgent}',
     'buttons'=>array
     (
         'urgent' => array

@@ -114,6 +114,7 @@ class Communication extends CActiveRecord
 		$criteria->compare('ctrl_no',$this->ctrl_no,true);
 		$criteria->compare('subject_matter',$this->subject_matter,true);
 		$criteria->compare('date_received',$this->date_received,true);
+		
 		$criteria->compare('date_agenda',$this->date_agenda,true);
 		$criteria->compare('cat_id',$this->cat_id);
 		$criteria->compare('orig_id',$this->orig_id);

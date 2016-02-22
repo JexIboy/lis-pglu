@@ -16,7 +16,7 @@ $this->menu=array(
 		);
 
 
-Yii::app()->clientScript->registerScript('search', "
+Yii::app()->clientScript->registerScript('searchResolutions', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
 	return false;
@@ -29,7 +29,6 @@ $('.search-form form').submit(function(){
 });
 ");
 ?>
-
 
 <?php
 

@@ -116,7 +116,7 @@ $this->widget ( 'bootstrap.widgets.TbGridView', array (
 				'ctrl_no',
 				array('header'=>'Agenda Date','value'=>'$data->date_agenda'),
 				array('header'=>'Origin','value'=>'$data->orig->orig_name'),
-				array('header'=>'Subject Matter','value'=>'$data->subject_matter'),
+				array('name'=>'subject_matter','value'=>'$data->subject_matter'),
 				array('header'=>'Date Referred','value'=>' $data->getReferral($data->ctrl_no)'),
 				array('header'=>'Date Meeting/s','value'=>'$data->getCommMeetings($data->ctrl_no)'),
 				array('header'=>'Action Taken','value'=>'$data->getActionTaken($data->ctrl_no)'),

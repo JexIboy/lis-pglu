@@ -24,9 +24,13 @@ class CommMeetingReso extends CActiveRecord
 	 */
 	public $subject_matter;
 	public $ctrl_no;
+	public $user;
+
+
 	public function tableName()
 	{
 		return 'tbl_comm_meeting_reso';
+		
 	}
 
 	/**
@@ -48,7 +52,7 @@ class CommMeetingReso extends CActiveRecord
             ),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('meeting_reso_id, ref, ctrlNo, subject_matter, ctrl_no,ref_id, action_taken, date_meeting, comm_report, input_by, comm_rep_file, comm_meeting_stat', 'safe', 'on'=>'search'),
+			array('meeting_reso_id, ref, subject_matter, ctrlNo, ctrlNos, ctrl_no ,ref_id, action_taken, date_meeting, comm_report, input_by, comm_rep_file, comm_meeting_stat', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,13 +61,15 @@ class CommMeetingReso extends CActiveRecord
 	 */
 	public function relations()
 	{
+		
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
 			'inputBy' => array(self::BELONGS_TO, 'Employee', 'input_by'),
+			'commreso'=>array(self::BELONGS_TO, 'CommMeetingReso','.ref_id'),
 			'ref'=>array(self::BELONGS_TO, 'Referral','ref_id'),
-			'ctrlNo'=> array(self::BELONGS_TO,'Communication','ctrl_no'),
-			'subject_matter'=>array(self::HAS_ONE,'Communication','subject_matter'),
+			'ctrlNo' => array(self::BELONGS_TO, 'Communication', 'ctrl_no'),
+			'subject_matter'=>array(self::BELONGS_TO,'Communication','ref_id'),	
 			
 		);
 	}
@@ -71,6 +77,9 @@ class CommMeetingReso extends CActiveRecord
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
+
+
+
 	public function attributeLabels()
 	{
 		return array(
@@ -104,30 +113,42 @@ class CommMeetingReso extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 		$criteria=new CDbCriteria();
-		$criteria->with=array('subject_matter','ref');
-		//$criteria->addSearchCondition('subject_matter',$this->ref_id->ctrl_no->subject_matter, true);
-		$criteria->compare('subject_matter',$this->subject_matter,true);
-		$criteria->compare('meeting_reso_id',$this->meeting_reso_id);
-		$criteria->compare('ref_id',$this->ref_id);
-		$criteria->compare('action_taken',$this->action_taken);
-		$criteria->compare('date_meeting',$this->date_meeting,true);
-		$criteria->compare('comm_report',$this->comm_report,true);
-		$criteria->compare('input_by',$this->input_by);
-		$criteria->compare('comm_rep_file',$this->comm_rep_file,true);
-		$criteria->compare('archive',$this->comm_rep_file,true);
-		$criteria->compare('comm_meeting_stat',$this->comm_meeting_stat);
+		//$criteria->with='subject_matter';		
+		//$criteria->compare('subject_matter',$this->subject_matter,true);
+		//$criteria->compare('ctrlNo',$this->ctrl_no,true);
+		//$criteria->compare('meeting_reso_id',$this->meeting_reso_id);
+		//$criteria->compare('ref_id',$this->ref_id);
+		//$criteria->compare('action_taken',$this->action_taken);
+		//$criteria->compare('date_meeting',$this->date_meeting,true);
+		//$criteria->compare('comm_report',$this->comm_report,true);
+		//$criteria->compare('input_by',$this->input_by);
+		//$criteria->compare('comm_rep_file',$this->comm_rep_file,true);
+		//$criteria->compare('archive',$this->comm_rep_file,true);
+		//$criteria->compare('comm_meeting_stat',$this->comm_meeting_stat);
+		$criteria->join = 'JOIN tbl_referral r ON t.ref_id = r.ref_id 
+							JOIN tbl_communication c ON r.ctrl_no = c.ctrl_no';
+		$criteria->condition = 'c.subject_matter LIKE "%' .$this->subject_matter . '%" AND t.archive = 0';
+		$criteria->compare('t.meeting_reso_id',$this->meeting_reso_id);
+		$criteria->compare('t.ref_id',$this->ref_id);
+		$criteria->compare('t.action_taken',$this->action_taken);
+		$criteria->compare('t.date_meeting',$this->date_meeting,true);
+		$criteria->compare('t.comm_report',$this->comm_report,true);
+		$criteria->compare('t.input_by',$this->input_by);
+		$criteria->compare('t.comm_rep_file',$this->comm_rep_file,true);
+		$criteria->compare('t.archive',$this->comm_rep_file,true);
+		$criteria->compare('t.comm_meeting_stat',$this->comm_meeting_stat);
+				
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+
 			'pagination' => array(
                 'pageSize' => 10,
             ),
 		));
 	}
-
 	public function viewArchive()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
-
 		$criteria=new CDbCriteria;
 		$criteria->condition='archive=1';
 		$criteria->compare('meeting_reso_id',$this->meeting_reso_id);
@@ -147,7 +168,6 @@ class CommMeetingReso extends CActiveRecord
             ),
 		));
 	}
-
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
@@ -172,6 +192,7 @@ class CommMeetingReso extends CActiveRecord
 		return $this->isNewRecord ? CHtml::listData(Referral::model()->findAll($criteria),'ref_id','ctrl_no') : CHtml::listData(Referral::model()->findAll($criteria2),'ref_id','ctrl_no');
 	}
 	public function getControlNumber(){
+	
 		return $this->ref->ctrlNo->ctrl_no;
 	}
 	public function getCommDetails(){
@@ -190,7 +211,10 @@ class CommMeetingReso extends CActiveRecord
 		}
 	}
 public function getSubjectMatter(){
-		return Communication::model()->findByPK($this->ref->ctrlNo)->subject_matter;
+			
+				
+				//var_dump($user);
+		return $this->ref->ctrlNo->subject_matter;
 	}
 	
 }

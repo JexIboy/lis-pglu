@@ -2,8 +2,9 @@
 <html lang="en" ng-app="PhpMyAdmin" ng-controller="AppController as vm">
 	<head>
 		<title>{{vm.selected_menu}} Page | LIS - PGLU</title>
-		<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-		<link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+		<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/angular-material-data-table/0.9.11/md-data-table.css">
 		<link rel="stylesheet" href="/angular-app/assets/css/main.css">
 	</head>
 	<body>
@@ -47,20 +48,7 @@
 						</h2>
 					</div>
 				</md-toolbar>
-				<md-tabs md-dynamic-height md-border-bottom md-selected="vm.selected_tab">
-					<md-tab label="Databases"></md-tab>
-					<md-tab label="Sql"></md-tab>
-					<md-tab label="Status"></md-tab>
-					<md-tab label="User Accounts"></md-tab>
-					<md-tab label="Export"></md-tab>
-					<md-tab label="Import"></md-tab>
-					<md-tab label="Settings"></md-tab>
-					<md-tab label="Replication"></md-tab>
-					<md-tab label="Variables"></md-tab>
-					<md-tab label="Charsets"></md-tab>
-					<md-tab label="Engines"></md-tab>
-				</md-tabs>
-				<div ng-view></div>
+				<md-content ng-view flex layout-padding></md-content>
 			</md-content>
 		</div>
 
@@ -72,10 +60,16 @@
 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-material-data-table/0.9.11/md-data-table.min.js"></script>
 		
 		<script type="text/javascript" src="/angular-app/app.module.js"></script>
 		<script type="text/javascript" src="/angular-app/app.controller.js"></script>
 		<script type="text/javascript" src="/angular-app/app.routes.js"></script>
 		
+		<script type="text/javascript" src="/angular-app/modules/homepage/homepage.controller.js"></script>
+		<script type="text/javascript" src="/angular-app/modules/homepage/homepage.route.js"></script>
+
+		<script type="text/javascript" src="/angular-app/modules/communications/communications.controller.js"></script>
+		<script type="text/javascript" src="/angular-app/modules/communications/communications.route.js"></script>
 	</body>
 </html>

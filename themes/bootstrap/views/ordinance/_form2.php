@@ -35,7 +35,7 @@ $form = $this->beginWidget ( 'bootstrap.widgets.TbActiveForm', array (
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<?php echo $form->textFieldRow($model,'ord_no',array('class'=>'span2',  'value'=>'')); ?>
+	<?php echo $form->textFieldRow($model,'ord_no',array('class'=>'span2',  'value'=>'','placeholder'=>'000 - 0000')); ?>
     
   <?php echo $form->textAreaRow($model, 'subj_matter', array('class'=>'span6', 'rows'=>5,'value'=>'')); ?> 
 

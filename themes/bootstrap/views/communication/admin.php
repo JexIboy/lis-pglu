@@ -62,7 +62,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 		array('name'=>'ctrl_no','type'=>'raw','value'=>'CHtml::link($data->ctrl_no,array("communication/download","id"=>$data->ctrl_no))'),
 		'subject_matter',
 		array('header'=>'Origin','value'=>'$data->orig->orig_name'),
-		'date_agenda',
+		array('name'=>'date_agenda','value'=>'$data->date_agenda'),
 		/*
 		'date_received',
 		array('header'=>'Category','value'=>'$data->cat->cat_name'),
@@ -81,7 +81,6 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 ));
 ?>
 <?php $this->endWidget(); ?>
-
 </div><!-- form -->
 
 

@@ -36,7 +36,7 @@ $form = $this->beginWidget ( 'bootstrap.widgets.TbActiveForm', array (
 	<?php echo $form->errorSummary($model); ?>
 
 	<?php echo $form->textFieldRow($model,'ctrl_no',array('class'=>'span2',  'value'=>$model->isNewRecord ? $count : $model->ctrl_no)); ?>
-    <?php echo $form->textAreaRow($model, 'subject_matter', array('class'=>'span6', 'rows'=>5)); ?> 
+  <?php echo $form->textAreaRow($model, 'subject_matter', array('class'=>'span6', 'rows'=>5)); ?> 
 
 	<?php echo $form->datepickerRow($model, 'date_received',array('prepend'=>'<i class="icon-calendar"></i>','options'=>array('format'=>'yyyy-mm-dd'))); ?>
 

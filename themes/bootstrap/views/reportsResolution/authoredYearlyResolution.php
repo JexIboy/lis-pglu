@@ -34,15 +34,11 @@ $box = $this->beginWidget ( 'bootstrap.widgets.TbBox', array (
 					  'label' => 'Print Result',
 					  'visible'=>isset($_POST['searchButton']) ? true:false,
 					  'htmlOptions'=>array('id'=>'printButton',)
-					  
-					  
 		), ),
 		'htmlOptions' => array (
 				'class' => 'bootstrap-widget-table',
                                 'style'=>'width:100%; text-align:center;',
 		),
-               		
-		
 )
  );
 ?>

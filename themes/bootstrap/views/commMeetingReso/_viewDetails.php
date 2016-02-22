@@ -1,5 +1,5 @@
 <?php
-$db=new PDO("mysql:host=localhost; dbname=lis-pglu", "root", "");
+$db=new PDO("mysql:host=localhost; dbname=lis-pglu", "root", "yobiadmin");
 $dbst=$db->prepare("SELECT subject_matter,ctrl_no FROM tbl_communication WHERE ctrl_no=:id");
 $dbst1=$db->prepare("SELECT ctrl_no FROM tbl_referral WHERE ref_id=:id");
 

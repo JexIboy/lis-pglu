@@ -114,15 +114,31 @@ $tbl ='<table cellspacing="0" cellpadding="0" >
         <br/>';
 
 $x=1;
-$let=array('A','B','C','D','E','F','G');
-foreach($communication as $value){
-    
- $tbl .='<tr style="font-size:11px; text-align:left;">
+$let=array('(A)','(B)','(C)','(D)','(E)','(F)','G','H','I');
+$tbl .='<tr style="font-size:11px; text-align:left;">
              <td style="width:15%;"></td>
-             <td style="width:80%;">'.$x.'. '.ucfirst($value->subject_matter).'</td>
+
+             <td style="width:65%; text-align:justify;"></td>
+              <td style="width:10%;"></td>
+              <td style="width:15%; border-width:.1px; border:.1px; text-align:center; font-size:8px;">TO BE REFERRED TO</td>
         </tr>
         <br/>';
  $x++;
+ $let++;
+foreach($communication as $value){
+ 
+   
+ $tbl .='<tr style="font-size:11px; text-align:left;">
+             <td style="width:15%;"></td>
+
+             <td style="width:65%; text-align:justify;">'.$x.'. '.ucfirst($value->subject_matter).'</td>
+              <td style="width:10%;">                  '.$let[0].'</td>
+              <td style="width:15%; border-width:1px; border-height:1px; font-size:9px;">ASDFSADF</td>
+        </tr>
+        <br/>';
+ $x++;
+ $let++;
+
 }
 
 $tbl .='<tr style="font-weight:bold; font-size:11px; text-align:left;">

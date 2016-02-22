@@ -1,3 +1,4 @@
+
 <?php
 /* @var $this CommMeetingResoController */
 /* @var $model CommMeetingReso */
@@ -35,10 +36,7 @@ $('.search-form form').submit(function(){
 )); ?>
 </div><!-- search-form -->
 
-
-
 <?php
-
 $box = $this->beginWidget ( 'bootstrap.widgets.TbBox', array (
 		'title' => 'Search Committee Meeting' ,
 		'headerIcon' => 'icon-th-list',
@@ -51,28 +49,37 @@ $box = $this->beginWidget ( 'bootstrap.widgets.TbBox', array (
 ) );
 ?>
 <div class="span8">
-
 <?php 
+
+	//var_dump($user);
 $this->widget('bootstrap.widgets.TbGridView', array(
         'id'=>'comm-meeting-reso-grid',
 	'dataProvider'=>$model->search(),
-	'template'=>"{items}{pager}",
+	
 	'filter'=>$model,
+	'pager'=>array(
+            'class'=>'LinkPager',
+            'firstPageLabel'=>'FIRST',
+            'lastPageLabel'=>'LAST',
+            'nextPageLabel'=>'NEXT',
+            'prevPageLabel'=>'BACK',
+            'header'=>'',
+            ),
 	'columns'=>array(
 		array('header'=>'No.','value'=>'$row+1'),
 		//'meeting_reso_id',
-
 		array('header'=>'Control No.','filter'=>'','type'=>'raw','value'=>'CHtml::link($data->ref->ctrl_no,array("commMeetingReso/download","id"=>$data->meeting_reso_id))'),
-		array('name'=>'subject_matter','value'=>'$data->ref->ctrlNo->subject_matter','htmlOptions'=>array('style'=>'width:40%;')),
+		//'comm.subject_matter',
+		array('name'=>'subject_matter','value'=>'$data->getSubjectMatter()','htmlOptions'=>array('style'=>'width:40%;')),
 		array('name'=>'action_taken','value'=>'$data->ActionTaken'),
 		'date_meeting',
 		'comm_report',
+		//'remark',
 		//array('name'=>'input_by','value'=>'$data->inputBy->Fullname'),
 		/*
 		'comm_rep_file',
 		'comm_meeting_stat',
 		*/
-
 		array('header'=>'Action','htmlOptions'=>array('style'=>'width:70px; text-align:center;'),'visible'=>$role == 'SCR-RF' || $role=='SYSAD'? true:false,
 			'class' => 'bootstrap.widgets.TbButtonColumn','template'=>$role=='SYSAD'? '{view}{update}{delete}':'{view}{update}',  
 			'buttons'=>array(

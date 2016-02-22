@@ -40,7 +40,7 @@ $form = $this->beginWidget ( 'bootstrap.widgets.TbActiveForm', array (
 
 	<?php if($model->isNewRecord){ echo $form->textFieldRow($model,'ctrl_no',array('class'=>'span2',  'value'=>$model->isNewRecord ? $id : $model->ctrl_no,'readOnly'=>true)); }?>
 	
-	<?php echo $form->textAreaRow($model, 'subj_matter', array('class'=>'span6', 'rows'=>5,'value'=>$model->isNewRecord? :$model->subj_matter,'readOnly'=>true)); ?> 
+	<?php echo $form->textAreaRow($model, 'subj_matter', array('class'=>'span6', 'rows'=>5,'value'=>$model->isNewRecord? :$model->subj_matter)); ?> 
 
 	<?php echo $form->select2Row($model, 'author', array('asDropDownList' => true, 
                                                                   'data' => CHtml::listData(Officials::model()->findAll(array('condition'=>'now() >= start_date')),'off_id','Fullname'),    

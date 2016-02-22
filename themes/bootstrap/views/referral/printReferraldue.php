@@ -60,7 +60,7 @@ $timezone = new DateTimeZone('Asia/Manila');
 
 $tbl = '<table cellspacing="0" cellpadding="7" border="1"  width="100%">
         <thead>
-        <tr style="font-weight:bold; font-size:13px; background-color:#b6aeae;">
+        <tr style="font-weight:bold; font-size:13px; background-color:skyblue;">
         <td style="text-align:center; width:10%;">Control No.</td>
         <td style="text-align:center; width:10%;">Date Referred</td>
         <td style="text-align:center; width:35%;">Subject Matter</td>
@@ -72,7 +72,6 @@ $tbl = '<table cellspacing="0" cellpadding="7" border="1"  width="100%">
     foreach($model as $values){ 
     $sbj= Communication::model()->FindByPK($values->ctrl_no)->subject_matter;
     $comm= Committee::model()->FindByPK($values->lead_committee)->comm_name;
-     $comm= Committee::model()->FindByPK($values->lead_committee)->comm_name;
     $dateref = new DateTime($values->date_referred, $timezone);
     $dateref1 = new DateTime($values->duedate, $timezone);
         $pdf->SetFont('helvetica', '', 10);

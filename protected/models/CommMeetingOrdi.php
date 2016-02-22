@@ -235,18 +235,4 @@ class CommMeetingOrdi extends CActiveRecord
 				return 'Return to Origin';break;
 		}
 	}
-
-	public function getCommDetailsById ($meeting_ordi_id) {
-		$details = Yii::app()->db
-				->createCommand()
-			    ->select('*')
-			    ->from('tbl_comm_meeting_ordi cmo')
-			    ->join('tbl_referral r', 'r.ref_id = cmo.ref_id')
-			    ->join('tbl_communication c', 'c.ctrl_no = r.ctrl_no')
-			    ->where('cmo.meeting_ordi_id = :meeting_ordi_id', array(':meeting_ordi_id'=>$meeting_ordi_id))
-			    ->queryRow();
-
-		return $details;
-	}
-
 }

@@ -66,7 +66,6 @@ class Photo extends CActiveRecord
 			'photo_usage' => 'Photo Usage',
 		);
 	}
-
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
@@ -90,7 +89,6 @@ class Photo extends CActiveRecord
 		$criteria->compare('file',$this->file,true);
 		$criteria->compare('photo_details',$this->photo_details,true);
 		$criteria->compare('photo_usage',$this->photo_usage);
-
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

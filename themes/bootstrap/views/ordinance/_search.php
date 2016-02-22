@@ -38,7 +38,8 @@ $box = $this->beginWidget ( 'bootstrap.widgets.TbBox', array (
 	<?php echo $form->textFieldRow($model, 'subj_matter', array('class'=>'span4')); ?> 
 
 	<?php echo $form->select2Row($model, 'author', array('asDropDownList' => true, 
-                                                                  'data' => CHtml::listData(Officials::model()->findAll(array('condition'=>'now() >= start_date and now() <= end_date')),'off_id','Fullname'),    
+                                                                  'data' => CHtml::listData(Officials::model()->findAll(''),'off_id','Fullname'),    
+                                                                  
                                                                   'multiple'=> 'multiple',
                                                                  
                                                                     'options' => array(
