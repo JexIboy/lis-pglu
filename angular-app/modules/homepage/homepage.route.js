@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('PhpMyAdmin')
+		.module('HomepageModule')
 		.config(function($routeProvider) {
 			$routeProvider
 				.when('/', {

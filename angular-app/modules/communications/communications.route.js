@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('PhpMyAdmin')
+		.module('CommunicationsModule')
 		.config(function($routeProvider) {
 			$routeProvider
 				.when('/communications', {

@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('PhpMyAdmin')
+		.module('CommunicationsModule')
 		.controller('CommunicationsController', CommunicationsController);
 
 	CommunicationsController.$inject = [];
