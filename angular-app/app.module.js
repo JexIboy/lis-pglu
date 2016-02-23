@@ -8,9 +8,10 @@
 			'ngAnimate',
 			'ngRoute',
 			'ngMaterial',
-			'md.data.table',
-			'slickCarousel',
+			'mdDataTable',
 			'CommunicationsModule',
-			'HomepageModule'
+			'HomepageModule',
+			'ResolutionsModule',
+			'OrdinancesModule'
 		]);
 })();
