@@ -14,3 +14,6 @@ install bower
 
 install bower package
 -> bower install
+
+open your browser ang go to this link
+-> lis-pglu.io/angular-app
