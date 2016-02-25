@@ -49,7 +49,7 @@
 					res_no : raw_resolutions[count].res_no,
 					subj_matter : raw_resolutions[count].subj_matter,
 					author : raw_resolutions[count].author,
-					date_passed : moment(raw_resolutions[count].date_passed).format('MMM DD, YYYY'),
+					date_passed : moment(raw_resolutions[count].date_passed).unix(),
 				});
 			}
 

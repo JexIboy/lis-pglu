@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="PhpMyAdmin" ng-controller="AppController as vm">
+<html lang="en" ng-app="LisApp" ng-controller="AppController as vm">
 	<head>
 		<title>{{vm.selected_menu}} Page | LIS - PGLU</title>
 		<link rel="stylesheet" type="text/css" href="/angular-app/bower_components/angular-material/angular-material.min.css">
@@ -65,11 +65,13 @@
 		<script type="text/javascript" src="/angular-app/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 		<script type="text/javascript" src="/angular-app/bower_components/angular-material/angular-material.min.js"></script>
 		<script type="text/javascript" src="/angular-app/bower_components/angular-material-icons/angular-material-icons.min.js"></script>
+		<script type="text/javascript" src="/angular-app/bower_components/angular-google-chart/ng-google-chart.min.js"></script>
 		<script type="text/javascript" src="/angular-app/bower_components/mdDataTable/dist/md-data-table-templates.js"></script>	
 		<script type="text/javascript" src="/angular-app/bower_components/mdDataTable/dist/md-data-table.js"></script>		
 		<script type="text/javascript" src="/angular-app/bower_components/lodash/lodash.min.js"></script>
 		
 		<script type="text/javascript" src="/angular-app/app.module.js"></script>
+		<script type="text/javascript" src="/angular-app/app.config.js"></script>
 		<script type="text/javascript" src="/angular-app/app.controller.js"></script>
 		<script type="text/javascript" src="/angular-app/app.routes.js"></script>
 		
@@ -90,5 +92,8 @@
 		<script type="text/javascript" src="/angular-app/modules/ordinances/ordinances.controller.js"></script>
 		<script type="text/javascript" src="/angular-app/modules/ordinances/ordinances.route.js"></script>
 		<script type="text/javascript" src="/angular-app/modules/ordinances/ordinances.service.js"></script>
+
+		<script type="text/javascript" src="/angular-app/directives/resolutions/resolutions.directive.js"></script>
+		<script type="text/javascript" src="/angular-app/directives/ordinances/ordinances.directive.js"></script>
 	</body>
 </html>

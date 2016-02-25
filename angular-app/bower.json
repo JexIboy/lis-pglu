@@ -1,28 +1,29 @@
 {
-	"name": "lis-pglu",
-	"version": "0.0.1",
-	"authors": [
-		"Jex <jex310@gmail.com>",
-		"Yobi <johnbillymarbella@gmail.com>"
-	],
-	"description": "lis-pglu",
-	"ignore": [
-		"**/.*",
-		"node_modules",
-		"bower_components"
-	],
-	"dependencies": {
-		"angular": "^1.4.8",
-		"angular-messages": "^1.3.20",
-		"angular-route": "^1.4.8",
-		"angular-animate": "^1.4.8",
-		"angular-aria": "^1.4.8",
-		"angular-material": "^1.0.0",
-		"underscore": "^1.8.3",
-		"moment": "^2.9.0",
-		"mdDataTable": "^1.3.0"
-	},
-	"resolutions": {
-		"angular": ">=1.3.x"
-	}
+  "name": "lis-pglu",
+  "version": "0.0.1",
+  "authors": [
+    "Jex <jex310@gmail.com>",
+    "Yobi <johnbillymarbella@gmail.com>"
+  ],
+  "description": "lis-pglu",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "angular": "^1.4.8",
+    "angular-messages": "^1.3.20",
+    "angular-route": "^1.4.8",
+    "angular-animate": "^1.4.8",
+    "angular-aria": "^1.4.8",
+    "angular-material": "^1.0.0",
+    "underscore": "^1.8.3",
+    "moment": "^2.9.0",
+    "mdDataTable": "^1.3.0",
+    "angular-google-chart": "^0.1.0"
+  },
+  "resolutions": {
+    "angular": ">=1.3.x"
+  }
 }

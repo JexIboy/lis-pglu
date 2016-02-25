@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 	angular
-		.module('PhpMyAdmin')
+		.module('LisApp')
 		.controller('AppController', AppController);
 
 	AppController.$inject = ['$scope', '$timeout', '$mdSidenav', '$log', '$location', '$filter'];

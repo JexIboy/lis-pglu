@@ -49,7 +49,7 @@
 					ord_no : raw_ordinances[count].ord_no,
 					subj_matter : raw_ordinances[count].subj_matter,
 					author : raw_ordinances[count].author,
-					date_passed : moment(raw_ordinances[count].date_passed).format('MMM DD, YYYY'),
+					date_passed : moment(raw_ordinances[count].date_passed).unix(),
 				});
 			}
 

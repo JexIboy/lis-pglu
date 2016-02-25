@@ -2,13 +2,14 @@
 	'use strict';
 	
 	angular
-		.module('PhpMyAdmin', [
+		.module('LisApp', [
 			'ngMessages',
 			'ngAria',
 			'ngAnimate',
 			'ngRoute',
 			'ngMaterial',
 			'mdDataTable',
+			'googlechart',
 			'CommunicationsModule',
 			'HomepageModule',
 			'ResolutionsModule',

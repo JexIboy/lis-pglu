@@ -1,7 +1,8 @@
 assets/*
-!assets/.gitignore
+assets/.gitignore
 protected/runtime/*
 !protected/runtime/.gitignore
 protected/data/*.db
 protected/dBaseBackup/
 themes/classic/views/
+angular-app/bower_components/

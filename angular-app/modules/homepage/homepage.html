@@ -1,70 +1,30 @@
 <md-content>
-	<h3 class="md-headline">Today is {{vm.dateToday()}}</h3>
+	<h3 class="md-headline">Today is {{vm.dateToday}}</h3>
 </md-content>
 <md-content>
 	<md-tabs md-dynamic-height md-border-bottom>
 		<md-tab label="resolutions">
 			<md-content class="md-padding">
-				<md-card>
-					<md-subheader>Filter by search</md-subheader>
-					<md-input-container style="margin:15px;">
-							<label>Search</label>
-							<input type="text" ng-model="vm.resolution_query">
-					</md-input-container>
-					<div ng-hide="true">
-                		{{(vm.filteredResolutions = (vm.resolutions | filter: vm.resolution_query))}}
-            		</div>
-				</md-card>
-				<md-card>
-					<mdt-table mdt-row="{'data': vm.filteredResolutions,
-										'table-row-id-key': 'id',
-										'column-keys': ['res_no', 'subj_matter', 'author', 'date_passed']}"
-								sortable-columns="true"
-								animate-sort-icon="true"
-								paginated-rows="vm.pagination">
-						<mdt-header-row>
-							<mdt-column sortable-rows-default align-rule="left">Resolution No.</mdt-column>
-							<mdt-column align-rule="left">Subject Matter</mdt-column>
-							<mdt-column align-rule="left">Author(s)</mdt-column>
-							<mdt-column align-rule="left">Date Passed</mdt-column>
-						</mdt-header-row>
-					</mdt-table>
-					</md-card>
+				<resolutions resolutions="vm.resolutions"></resolutions>
 			</md-content>
 		</md-tab>
 		<md-tab label="ordinances">
 			<md-content class="md-padding">
+				<ordinances ordinances="vm.ordinances"></ordinances>
+			</md-content>
+		</md-tab>
+		<md-tab label="monthly reports">
+			<md-content class="md-padding">
 				<md-card>
-					<md-subheader>Filter by search</md-subheader>
-					<md-input-container style="margin:15px;">
-							<label>Search</label>
-							<input type="text" ng-model="vm.ordinance_query">
-					</md-input-container>
-					<div ng-hide="true">
-                		{{(vm.filteredOrdinances = (vm.ordinances | filter: vm.ordinance_query))}}
-            		</div>
-				</md-card>
-				<md-card>
-					<mdt-table mdt-row="{'data': vm.filteredOrdinances,
-										'table-row-id-key': 'id',
-										'column-keys': ['ord_no', 'subj_matter', 'author', 'date_passed']}"
-								sortable-columns="true"
-								animate-sort-icon="true"
-								paginated-rows="vm.pagination">
-						<mdt-header-row>
-							<mdt-column sortable-rows-default align-rule="left">Ordinance No.</mdt-column>
-							<mdt-column align-rule="left">Subject Matter</mdt-column>
-							<mdt-column align-rule="left">Author(s)</mdt-column>
-							<mdt-column align-rule="left">Date Passed</mdt-column>
-						</mdt-header-row>
-					</mdt-table>
+					<div flex google-chart chart="vm.monthlyChartObject" agc-on-select="vm.hideSeries(selectedItem, 'monthlyChartObject')" style="height:450px;"></div>
 				</md-card>
 			</md-content>
 		</md-tab>
-		<md-tab label="three">
+		<md-tab label="yearly reports">
 			<md-content class="md-padding">
-				<h1 class="md-display-2">Tab Three</h1>
-				<p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.</p>
+				<md-card>
+					<div flex google-chart chart="vm.yearlyChartObject" agc-on-select="vm.hideSeries(selectedItem, 'yearlyChartObject')" style="height:450px;"></div>
+				</md-card>
 			</md-content>
 		</md-tab>
 	</md-tabs>	

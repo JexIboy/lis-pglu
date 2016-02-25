@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('PhpMyAdmin')
+		.module('LisApp')
 		.config(function($routeProvider) {
 			$routeProvider
 				.otherwise({

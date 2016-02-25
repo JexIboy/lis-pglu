@@ -58,7 +58,7 @@
 			"author": "Jex, Yobi",
 			"reso_file": "RESOLUTION NO. 001-2004.pdf",
 			"input_by": "21",
-			"date_passed": "2002-01-03",
+			"date_passed": "2002-01-01",
 			"archive": "0"
 		},
 		{
@@ -88,7 +88,7 @@
 			"author": "Jex, Yobi",
 			"reso_file": "LU",
 			"input_by": "2",
-			"date_passed": "2002-01-03",
+			"date_passed": "2016-01-03",
 			"archive": "21"
 		},
 		{
@@ -98,8 +98,8 @@
 			"author": "Jex, Yobi",
 			"reso_file": "2",
 			"input_by": "RESOLUTION NO. 001-2008.pdf",
-			"date_passed": "2002-01-03",
-			"archive": "2008-01-03"
+			"date_passed": "2016-10-03",
+			"archive": "2016-01-03"
 		},
 		{
 			"res_no": "001 - 2010",
@@ -108,8 +108,8 @@
 			"author": "Jex, Yobi",
 			"reso_file": "2",
 			"input_by": "Resolution 001-2010.pdf",
-			"date_passed": "2002-01-03",
-			"archive": "2010-01-07"
+			"date_passed": "2016-01-03",
+			"archive": "2016-01-07"
 		},
 		{
 			"res_no": "001 - 2011",

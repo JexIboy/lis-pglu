@@ -1,0 +1,20 @@
+<md-card>
+	<md-subheader>Filter by search</md-subheader>
+	<md-input-container style="margin:15px;">
+			<label>Search</label>
+			<input type="text" ng-model="resolution_query">
+	</md-input-container>
+</md-card>
+<md-card>
+	<mdt-table mdt-row="tableOpts"
+				sortable-columns="true"
+				animate-sort-icon="true"
+				paginated-rows="pagination">
+		<mdt-header-row>
+			<mdt-column sortable-rows-default align-rule="left">Resolution No.</mdt-column>
+			<mdt-column align-rule="left">Subject Matter</mdt-column>
+			<mdt-column align-rule="left">Author(s)</mdt-column>
+			<mdt-column align-rule="left">Date Passed</mdt-column>
+		</mdt-header-row>
+	</mdt-table>
+</md-card>
