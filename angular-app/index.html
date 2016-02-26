@@ -17,15 +17,15 @@
 				</md-toolbar>
 				<md-content layout-align="top center">
 					<md-list ng-cloak class="app-menus">
-						<md-list-item ng-click="vm.goTo(menu); vm.selected_menu = menu.title" ng-repeat="menu in vm.menus" class="menu" ng-class="{selected: vm.selected_menu == menu.title}">							
-							<p>{{menu.title}}</p>
+						<md-list-item ui-sref="{{menu.state}}" ng-click="vm.toggleMenu(); vm.selected_menu = menu.title;" ng-repeat="menu in vm.menus" class="menu" ng-class="{selected: vm.selected_menu == menu.title}">							
+							{{menu.title}}
 							<md-menu class="md-secondary" ng-if="menu.submenus.length">
 								<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
 									<md-icon md-menu-origin>keyboard_arrow_down</md-icon>
 								</md-button>
 								<md-menu-content width="4">
 									<md-menu-item ng-repeat="submenu in menu.submenus">
-										<md-button ng-click="vm.goTo(submenu)">
+										<md-button ui-sref="{{submenu.state}}" ng-click="vm.toggleMenu()">
 											{{submenu.title}}
 										</md-button>
 									</md-menu-item>
@@ -33,7 +33,7 @@
 							</md-menu>
 						</md-list-item>
 						<md-divider></md-divider>
-						<md-list-item ng-click="vm.goTo($event)">
+						<md-list-item ui-sref="logout">
 							<p>Logout</p>
 						</md-list-item>		      
 					</md-list>
@@ -50,7 +50,7 @@
 						</h2>
 					</div>
 				</md-toolbar>
-				<md-content ng-view flex layout-padding></md-content>
+				<md-content ui-view flex layout-padding></md-content>
 			</md-content>
 		</div>
 
@@ -62,6 +62,7 @@
 		<script type="text/javascript" src="/angular-app/bower_components/angular-aria/angular-aria.min.js"></script>
 		<script type="text/javascript" src="/angular-app/bower_components/angular-messages/angular-messages.min.js"></script>
 		<script type="text/javascript" src="/angular-app/bower_components/angular-route/angular-route.min.js"></script>
+		<script type="text/javascript" src="/angular-app/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 		<script type="text/javascript" src="/angular-app/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 		<script type="text/javascript" src="/angular-app/bower_components/angular-material/angular-material.min.js"></script>
 		<script type="text/javascript" src="/angular-app/bower_components/angular-material-icons/angular-material-icons.min.js"></script>
@@ -95,5 +96,7 @@
 
 		<script type="text/javascript" src="/angular-app/directives/resolutions/resolutions.directive.js"></script>
 		<script type="text/javascript" src="/angular-app/directives/ordinances/ordinances.directive.js"></script>
+
+		<script type="text/javascript" src="/angular-app/services/http_service.service.js"></script>
 	</body>
 </html>

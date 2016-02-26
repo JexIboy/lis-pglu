@@ -5,9 +5,9 @@
 		.module('ResolutionsModule')
 		.service('ResolutionsService', ResolutionsService);
 
-	ResolutionsService.$inject = ['$http', '$q'];
+	ResolutionsService.$inject = ['HTTPService'];
 
-	function ResolutionsService($http, $q) {
+	function ResolutionsService(HTTPService) {
 		var raw_resolutions = [];
 		var final_resolutions = [];
 
@@ -17,20 +17,10 @@
 		this.sanitizeData = sanitizeData;
 
 		function fetchResolutions(){
-			var defer = $q.defer();
+			var url = '/angular-app/data/resolutions.json';
+			var isCache = true;
 
-			$http({
-				url: '/angular-app/data/resolutions.json',
-				method: 'GET'
-			})
-			.success(function(data) {
-				defer.resolve(data);
-			})
-			.error(function(error) {
-				defer.reject(error);
-			});
-
-			return defer.promise;
+			return HTTPService.httpGET(url, isCache);
 		}
 
 		function setResolutions(data) {

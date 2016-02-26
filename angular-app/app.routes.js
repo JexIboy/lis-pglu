@@ -3,10 +3,8 @@
 
 	angular
 		.module('LisApp')
-		.config(function($routeProvider) {
-			$routeProvider
-				.otherwise({
-					redirectTo: '/'
-				});
+		.config(function($stateProvider, $urlRouterProvider) {
+
+			$urlRouterProvider.otherwise("/");
 		});
 })();

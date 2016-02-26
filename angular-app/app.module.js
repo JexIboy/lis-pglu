@@ -6,7 +6,7 @@
 			'ngMessages',
 			'ngAria',
 			'ngAnimate',
-			'ngRoute',
+			'ui.router',
 			'ngMaterial',
 			'mdDataTable',
 			'googlechart',

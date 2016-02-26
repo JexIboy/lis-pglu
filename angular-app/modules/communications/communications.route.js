@@ -3,9 +3,9 @@
 
 	angular
 		.module('CommunicationsModule')
-		.config(function($routeProvider) {
-			$routeProvider
-				.when('/communications', {
+		.config(function($stateProvider) {
+			$stateProvider
+				.state('communications', {
 					templateUrl: '/angular-app/modules/communications/communications.html',
 					controller: 'CommunicationsController',
 					controllerAs: 'vm'

@@ -5,9 +5,9 @@
 		.module('OrdinancesModule')
 		.service('OrdinancesService', OrdinancesService);
 
-	OrdinancesService.$inject = ['$http', '$q'];
+	OrdinancesService.$inject = ['HTTPService'];
 
-	function OrdinancesService($http, $q) {
+	function OrdinancesService(HTTPService) {
 		var raw_ordinances = [];
 		var final_ordinances = [];
 
@@ -17,20 +17,10 @@
 		this.sanitizeData = sanitizeData;
 
 		function fetchOrdinances(){
-			var defer = $q.defer();
+			var url = '/angular-app/data/ordinances.json';
+			var isCache = true;
 
-			$http({
-				url: '/angular-app/data/ordinances.json',
-				method: 'GET'
-			})
-			.success(function(data) {
-				defer.resolve(data);
-			})
-			.error(function(error) {
-				defer.reject(error);
-			});
-
-			return defer.promise;
+			return HTTPService.httpGET(url, isCache);
 		}
 
 		function setOrdinances(data) {

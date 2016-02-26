@@ -3,3 +3,7 @@
 	-moz-box-shadow: inset 5px 0px 0px 0px rgb(63, 81, 181);
 	box-shadow: inset 5px 0px 0px 0px rgb(63, 81, 181);
 }
+
+.menu a[ui-sref] {
+	margin: 0;
+}
